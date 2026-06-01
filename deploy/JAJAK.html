@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>자작자작 — JAJAK · Case Study</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    color: #17191a;
+    -webkit-text-size-adjust: 100%;
+  }
+  body { overflow-x: hidden; }
+
+  :root {
+    --teal: #34c3ce;
+    --teal-label: #5dd5de;
+    --ink: #17191a;
+    --muted: #6f6f6f;
+    --dark: #1a2323;
+    --mint: #eff5f6;
+  }
+
+  /* ---------- Fixed-width 1920 stage, horizontal scale to viewport ---------- */
+  #stage-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  #stage {
+    width: 1920px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -960px;
+    transform-origin: top center;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    background: rgba(249,249,249,0.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .topbar-inner {
+    width: 100%;
+    max-width: 1920px;
+    height: 72px;
+    margin: 0 auto;
+    padding: 0 36px;
+    display: flex;
+    align-items: center;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px 10px 14px;
+    background: #ffffff;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #17191a;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .back:hover { transform: translateX(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .back svg { width: 16px; height: 16px; }
+
+  /* ---------- Section frame ---------- */
+  .section {
+    width: 1920px;
+    position: relative;
+    padding: 0 252px;
+  }
+  .kicker {
+    font-weight: 800;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--teal-label);
+    letter-spacing: 0.01em;
+    margin: 0 0 26px;
+  }
+  .headline {
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.35;
+    color: var(--ink);
+    margin: 0 0 18px;
+    letter-spacing: -0.015em;
+  }
+  .headline em { color: var(--teal); font-style: normal; }
+  .lead {
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 0;
+    letter-spacing: -0.005em;
+    white-space: pre-line;
+  }
+  .lead b { color: var(--ink); font-weight: 700; }
+  .figure {
+    width: 1920px;
+    display: flex;
+    justify-content: center;
+  }
+  .figure img { display: block; width: 1920px; height: auto; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-top: 104px;
+    padding-bottom: 56px;
+    display: grid;
+    grid-template-columns: 720px 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .hero-text { display: flex; flex-direction: column; gap: 30px; }
+  .hero-headings { display: flex; flex-direction: column; gap: 14px; }
+  .hero-tagline {
+    font-weight: 700; font-size: 32px; line-height: 1.2;
+    color: var(--teal-label); letter-spacing: -0.01em;
+  }
+  .hero-title {
+    font-weight: 800; font-size: 104px; line-height: 1;
+    color: var(--ink); margin: 0; letter-spacing: -0.03em;
+  }
+  .hero-subtitle {
+    font-weight: 500; font-size: 34px; line-height: 1.2;
+    color: var(--muted); letter-spacing: -0.01em;
+  }
+  .role-tags { display: flex; gap: 12px; flex-wrap: wrap; }
+  .role-tags span {
+    height: 54px; padding: 0 24px; border-radius: 33px;
+    background: #ffffff; border: 1px solid #c9cdd6;
+    display: inline-flex; align-items: center;
+    font-weight: 500; font-size: 24px; color: var(--ink); white-space: nowrap;
+  }
+  .meta { margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .meta-row { display: grid; grid-template-columns: 130px 1fr; align-items: baseline; column-gap: 24px; }
+  .meta-row dt { font-weight: 500; font-size: 26px; color: var(--muted); margin: 0; }
+  .meta-row dd { margin: 0; font-weight: 700; font-size: 26px; color: var(--ink); line-height: 1.2; letter-spacing: -0.005em; }
+  .hero-visual { display: flex; align-items: center; justify-content: center; }
+  .hero-visual img { width: 900px; height: auto; }
+
+  /* ---------- Overview ---------- */
+  .overview { padding-top: 64px; padding-bottom: 18px; }
+  .overview .headline { margin-bottom: 20px; }
+  .diagram-fig { margin: 24px 0 56px; }
+  .diagram-fig img { width: 1416px; }
+
+  /* 주요 기능 card */
+  .feature-card {
+    margin: 0 252px 96px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    column-gap: 64px;
+    align-items: stretch;
+    box-shadow: 0 2px 18px rgba(0,0,0,0.03);
+  }
+  .feature-card .divider { width: 1px; background: #ebedee; }
+  .feature-card .col { display: flex; flex-direction: column; gap: 22px; }
+  .feature-card h3 {
+    font-weight: 700; font-size: 28px; color: var(--muted);
+    margin: 0; text-align: center; letter-spacing: -0.005em;
+  }
+  .feature-card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .feature-card li {
+    position: relative; padding-left: 30px;
+    font-weight: 500; font-size: 26px; line-height: 1.45; color: var(--ink); letter-spacing: -0.005em;
+  }
+  .feature-card li::before {
+    content: ''; position: absolute; left: 6px; top: 0.6em;
+    width: 9px; height: 9px; border-radius: 50%; background: var(--teal);
+  }
+
+  /* ---------- Project Goal (white panel) ---------- */
+  .goal { background: #ffffff; padding: 96px 0 90px; }
+  .goal .lead { color: #3b3b3b; }
+  .goal-fig { margin-top: 56px; }
+  .goal-fig img { width: 1416px; }
+
+  /* ---------- Voice of Customers (dark) ---------- */
+  .voc { background: var(--dark); padding: 100px 0 96px; }
+  .voc .kicker { color: var(--teal-label); }
+  .voc .headline { color: #ffffff; font-size: 42px; }
+  .voc .lead { color: #c4ccce; }
+  .voc-fig { margin-top: 52px; }
+  .voc-fig img { width: 1416px; }
+
+  /* ---------- Solutions ---------- */
+  .solution { background: #f9f9f9; padding: 86px 0 78px; }
+  .sol-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+  .sol-meta { display: flex; align-items: center; gap: 12px; }
+  .sol-num { font-weight: 800; font-size: 32px; color: var(--teal); letter-spacing: 0.03em; }
+  .chip {
+    height: 34px; padding: 0 13px; border: 1.5px solid var(--teal-label); border-radius: 9px;
+    display: inline-flex; align-items: center; color: var(--teal); font-weight: 700; font-size: 19px;
+    letter-spacing: -0.005em;
+  }
+  .sol-title {
+    font-weight: 700; font-size: 42px; line-height: 1.35; color: var(--ink); margin: 0; letter-spacing: -0.015em;
+  }
+  .sol-title em { color: var(--teal); font-style: normal; }
+  .sol-fig { margin-top: 8px; }
+
+  /* ---------- Mint region (Components / QA / Usability) ---------- */
+  .mint-block { background: var(--mint); }
+  .chapter { padding: 92px 0 30px; }
+  .chapter .lead { color: #3b3b3b; }
+  .chapter-fig { margin-top: 28px; }
+  .qa-fig img { width: 1416px; }
+  .components-fig img, .ut-fig img { width: 1416px; }
+
+  /* Usability Test head */
+  .ut { padding: 92px 0 36px; }
+  .ut-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .ut-head .ut-titles .kicker { margin-bottom: 16px; }
+  .ut-head .ut-titles .headline { margin: 0; }
+  .ut-meta { text-align: right; font-weight: 600; font-size: 24px; color: #8a9a9a; line-height: 1.7; white-space: nowrap; }
+  .ut-meta b { color: #4a5a5a; font-weight: 700; }
+  .ut-fig { margin-top: 30px; }
+  .ut.last { padding-bottom: 96px; }
+
+  /* ---------- Lesson Learned ---------- */
+  .lesson { background: #f9f9f9; padding: 100px 252px 140px; }
+  .lesson .headline { margin-bottom: 48px; white-space: pre-line; font-size: 42px; }
+  .lesson-grid { display: grid; grid-template-columns: 1fr 760px; gap: 64px; align-items: start; }
+  .lesson-cards { display: flex; flex-direction: column; gap: 24px; }
+  .lesson-card { background: #ffffff; border: 1px solid #e2e6e7; border-radius: 22px; padding: 30px 34px; }
+  .lesson-card h4 { font-weight: 700; font-size: 27px; color: var(--teal-label); margin: 0 0 14px; letter-spacing: -0.005em; }
+  .lesson-card p { margin: 0; font-weight: 500; font-size: 24px; line-height: 1.55; color: #2c2f30; letter-spacing: -0.005em; }
+  .lesson-card b { font-weight: 700; color: var(--ink); }
+  .lesson-photo img { width: 760px; height: auto; border-radius: 18px; display: block; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="./index.html" aria-label="포트폴리오로 돌아가기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      <span>Portfolio</span>
+    </a>
+  </div>
+</header>
+
+<div id="stage-wrap">
+  <div id="stage" data-screen-label="JAJAK case study">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="section hero" data-screen-label="Hero">
+      <div class="hero-text">
+        <div class="hero-headings">
+          <span class="hero-tagline">AI 글쓰기 피드백 서비스</span>
+          <h1 class="hero-title">자작자작</h1>
+          <span class="hero-subtitle">UXUI 개선 프로젝트</span>
+        </div>
+        <div class="role-tags">
+          <span>UX Planning(100%)</span>
+          <span>UI Design(100%)</span>
+          <span>QA Sheet(70%)</span>
+        </div>
+        <dl class="meta">
+          <div class="meta-row"><dt>기간</dt><dd>2025.03 - 2025.08 (6개월)</dd></div>
+          <div class="meta-row"><dt>참여인원</dt><dd>디자이너 1명, 개발자 5명</dd></div>
+          <div class="meta-row"><dt>목표</dt><dd>사용성 개선으로 최초 사용자의 학습 비용 감소</dd></div>
+        </dl>
+      </div>
+      <div class="hero-visual">
+        <img src="./assets/jjk/hero.png" alt="자작자작 데스크탑 · 모바일 서비스 화면 목업">
+      </div>
+    </section>
+
+    <!-- ===================== OVERVIEW ===================== -->
+    <section class="section overview" data-screen-label="Overview">
+      <h2 class="kicker">Overview</h2>
+      <p class="headline">자작자작 : AI 글쓰기 교육 플랫폼</p>
+      <p class="lead">자작자작은 교사의 채점 효율성을 높이고 학생의 사고력과 작문 완성도를 향상시키는 웹 서비스입니다.
+(주요 고객: 30-40대 초등 교사)</p>
+    </section>
+    <div class="figure diagram-fig" data-screen-label="관계도">
+      <img src="./assets/jjk/diagram.png" alt="학생 — JAJAK — 교사 관계도">
+    </div>
+    <div class="feature-card">
+      <div class="col">
+        <h3>학생 주요 기능</h3>
+        <ul>
+          <li>AI 글쓰기 도우미를 통한 시야 확장</li>
+          <li>맞춤법 검사 기능으로 정확하고 완성도 높은 문장 작성 지원</li>
+          <li>한 화면에서 피드백 확인 및 고쳐쓰기 동시 지원</li>
+        </ul>
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="col">
+        <h3>교사 주요 기능</h3>
+        <ul>
+          <li>글쓰기 과제에 대한 AI 피드백 기능으로 평가 효율 향상</li>
+          <li>갈래별 글감 추천으로 다양한 글쓰기 수업 설계 지원</li>
+          <li>작성한 글을 디지털 책으로 발행하여 수업 아카이빙 지원</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===================== PROJECT GOAL ===================== -->
+    <div class="goal" data-screen-label="Project Goal">
+      <section class="section">
+        <h2 class="kicker">Project Goal</h2>
+        <p class="headline">개인 사용자의 이탈을 막고, <em>최초 사용자의 학습 비용을 감소</em>시킵니다.</p>
+        <p class="lead">학생-글쓰기, 교사-피드백 작성 등 핵심 태스크 수행을 방해하는 UX 병목을 제거하고,
+최초 경험에서 서비스 가치를 인지하도록 디자인 개선을 진행합니다.</p>
+      </section>
+      <div class="figure goal-fig">
+        <img src="./assets/jjk/compare.png" alt="탐색 구조 · 상태 표현 · 프로세스 인지 부하 개선 (AS IS / TO BE)">
+      </div>
+    </div>
+
+    <!-- ===================== VOICE OF CUSTOMERS ===================== -->
+    <div class="voc" data-screen-label="Voice of Customers">
+      <section class="section">
+        <h2 class="kicker">Voice of Customers</h2>
+        <p class="headline">글쓰기, 피드백 화면의 낮은 가독성으로 핵심 정보가 잘 전달되지 않아요.</p>
+        <p class="lead">사용자의 지속적인 이탈을 막고 리텐션을 높이기 위해, 핵심 사용자인 학생과 교사 두 그룹의 정성적 피드백을 수집했습니다.
+그 결과 가독성 저하, 접근성 부족, 복잡한 프로세스 등 서비스 몰입을 방해하는 주요 VOC를 도출했습니다.</p>
+      </section>
+      <div class="figure voc-fig">
+        <img src="./assets/jjk/voc.png" alt="학생 · 교사 · 공통 VOC 보이스">
+      </div>
+    </div>
+
+    <!-- ===================== SOLUTION 1 ===================== -->
+    <section class="solution" data-screen-label="Solution 1">
+      <div class="section sol-head">
+        <div class="sol-meta">
+          <span class="sol-num">Solution 1</span>
+          <span class="chip">교사</span>
+        </div>
+        <h3 class="sol-title">회원가입 프로세스를 체계적으로 구축하여 사용자의 <em>의사결정 시간을 단축</em>했습니다.</h3>
+      </div>
+      <div class="figure sol-fig">
+        <img src="./assets/jjk/sol1.png" alt="회원가입 3단계 개선 (회원 유형 → 계정 유형 → 회원 정보 입력)">
+      </div>
+    </section>
+
+    <!-- ===================== SOLUTION 2 ===================== -->
+    <section class="solution" data-screen-label="Solution 2">
+      <div class="section sol-head">
+        <div class="sol-meta">
+          <span class="sol-num">Solution 2</span>
+          <span class="chip">교사</span>
+        </div>
+        <h3 class="sol-title">복수 컬럼을 사용하여 <em>교사의 평가항목 피드백을 세분화</em>했습니다.</h3>
+      </div>
+      <div class="figure sol-fig">
+        <img src="./assets/jjk/sol2.png" alt="평가항목 피드백 세분화 화면과 개선 포인트">
+      </div>
+    </section>
+
+    <!-- ===================== SOLUTION 3 ===================== -->
+    <section class="solution" data-screen-label="Solution 3">
+      <div class="section sol-head">
+        <div class="sol-meta">
+          <span class="sol-num">Solution 3</span>
+          <span class="chip">교사</span>
+          <span class="chip">학생</span>
+        </div>
+        <h3 class="sol-title">버튼 역할을 명확히하여 <em>불필요한 탐색 없이 피드백 현황을 파악</em>할 수 있도록 개선했습니다.</h3>
+      </div>
+      <div class="figure sol-fig">
+        <img src="./assets/jjk/sol3.png" alt="버튼 역할 구분 및 피드백 미리보기 화면">
+      </div>
+    </section>
+
+    <!-- ===================== SOLUTION 4 ===================== -->
+    <section class="solution" data-screen-label="Solution 4">
+      <div class="section sol-head">
+        <div class="sol-meta">
+          <span class="sol-num">Solution 4</span>
+          <span class="chip">교사</span>
+        </div>
+        <h3 class="sol-title">디지털 책의 편집 사용성을 직관적으로 개선했습니다.</h3>
+      </div>
+      <div class="figure sol-fig">
+        <img src="./assets/jjk/sol4.png" alt="디지털 책 편집 화면 개선과 개선 포인트">
+      </div>
+    </section>
+
+    <!-- ===================== SOLUTION 5 ===================== -->
+    <section class="solution" data-screen-label="Solution 5">
+      <div class="section sol-head">
+        <div class="sol-meta">
+          <span class="sol-num">Solution 5</span>
+          <span class="chip">교사</span>
+          <span class="chip">학생</span>
+        </div>
+        <h3 class="sol-title">플랫폼 간 내비게이션 일관성과 <em>콘텐츠 접근성</em>을 높였습니다.</h3>
+      </div>
+      <div class="figure sol-fig">
+        <img src="./assets/jjk/sol5.png" alt="모바일 내비게이션 일관성 및 콘텐츠 접근성 개선">
+      </div>
+    </section>
+
+    <!-- ===================== MINT REGION: Components / QA / Usability ===================== -->
+    <div class="mint-block">
+
+      <!-- Components -->
+      <section class="section chapter" data-screen-label="Components">
+        <h2 class="kicker">Components</h2>
+        <p class="headline">컴포넌트 체계화로 디자인-개발 일관성 확보</p>
+        <p class="lead">기존에는 <b>UI 컴포넌트</b>가 피그마에서 체계적으로 관리되지 않고 <b>프론트엔드 코드로만 존재</b>하여, 일관성 유지와 효율적인 업데이트가 어려운 상황이었습니다.
+따라서 디자인-개발 간 커뮤니케이션 비용 절감 및 UI 일관성을 통한 사용자 경험 품질 향상을 목표로 컴포넌트를 디자인하였습니다.</p>
+      </section>
+      <div class="figure chapter-fig components-fig">
+        <img src="./assets/jjk/components.png" alt="Button · TextField · Popup · Modal 등 컴포넌트 라이브러리">
+      </div>
+
+      <!-- QA Sheet -->
+      <section class="section chapter" data-screen-label="QA Sheet">
+        <h2 class="kicker">QA Sheet</h2>
+        <p class="headline">개발 검증을 위한 테스트 케이스 작성</p>
+        <p class="lead">디자인 작업 완료 후 개발 산출물이 기획 의도대로 구현되었는지 검증하기 위해 <b>총 549개의 테스트 케이스를 작성</b>하였습니다.
+단순 기능 구현 여부뿐 아니라 <b>인터랙션, 피드백 메시지, 레이아웃 등 UXUI 관점의 항목</b>을 별도로 분리하여 검수하였습니다.</p>
+      </section>
+      <div class="figure chapter-fig qa-fig">
+        <img src="./assets/jjk/qa.png" alt="자작자작 시험항목서 (QA 시트)">
+      </div>
+
+      <!-- Usability Test — 교사 -->
+      <section class="section ut" data-screen-label="Usability Test 교사">
+        <div class="ut-head">
+          <div class="ut-titles">
+            <h2 class="kicker">Usabillity Test</h2>
+            <p class="headline">학습 비용 감소 확인(교사)</p>
+          </div>
+          <div class="ut-meta">
+            <div>참여인원 &nbsp;|&nbsp; <b>40대 초등 교사 3인</b></div>
+            <div>성공기준 &nbsp;|&nbsp; <b>성공률: 75%이상, 평균 소요 시간: 2분 이내</b></div>
+          </div>
+        </div>
+      </section>
+      <div class="figure ut-fig">
+        <img src="./assets/jjk/ut-teacher.png" alt="교사 사용성 테스트 Task 1 · Task 2 결과">
+      </div>
+
+      <!-- Usability Test — 학생 -->
+      <section class="section ut last" data-screen-label="Usability Test 학생">
+        <div class="ut-head">
+          <div class="ut-titles">
+            <h2 class="kicker">Usabillity Test</h2>
+            <p class="headline">학습 비용 감소 확인(학생)</p>
+          </div>
+          <div class="ut-meta">
+            <div>참여인원 &nbsp;|&nbsp; <b>초등 고학년 1인, 중학생 2인</b></div>
+            <div>성공기준 &nbsp;|&nbsp; <b>성공률: 80%이상, 평균 소요 시간: 3분 이내</b></div>
+          </div>
+        </div>
+      </section>
+      <div class="figure ut-fig">
+        <img src="./assets/jjk/ut-student.png" alt="학생 사용성 테스트 Task 1 · Task 2 결과">
+      </div>
+
+    </div>
+
+    <!-- ===================== LESSON LEARNED ===================== -->
+    <section class="section lesson" data-screen-label="Lesson Learned">
+      <h2 class="kicker">Lesson Learned</h2>
+      <p class="headline">기존 유저의 사용성을 해치지 않으면서 신규 사용자의
+학습 비용을 줄이는 서비스 개선 경험을 했습니다.</p>
+      <div class="lesson-grid">
+        <div class="lesson-cards">
+          <div class="lesson-card">
+            <h4>기존 유저의 익숙함을 고려한 점진적 UX 개선</h4>
+            <p>기존 IA의 복잡함을 해결하면서도, <b>장기 사용자의 학습된 경험을 존중</b>하여 핵심 병목 지점을 선별적으로 개선하는 균형 감각을 익혔습니다.</p>
+          </div>
+          <div class="lesson-card">
+            <h4>유저의 의견을 직접 수집하는 경험</h4>
+            <p>교육박람회 현장에서 수집한 실제 유저의 의견과 VOC 데이터를 결합하여 서비스의 개선 방향성을 수립했습니다. 업데이트 배포 후 다시 현장 피드백을 확인하며 <b>설계한 가설을 직접 검증</b>하였고, 이 과정을 통해 유저의 입장을 깊이 고려하여 작업하는 <b>유저 중심의 업무 방식을 체득</b>할 수 있었습니다.</p>
+          </div>
+        </div>
+        <div class="lesson-photo">
+          <img src="./assets/jjk/lesson-photo.png" alt="교육박람회 자작자작 부스 현장">
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const wrap = document.getElementById('stage-wrap');
+  function fit() {
+    const vw = document.documentElement.clientWidth;
+    const s = Math.min(1, vw / 1920);
+    stage.style.transform = 'scale(' + s + ')';
+    wrap.style.height = (stage.offsetHeight * s) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(fit).observe(stage); }
+  fit();
+</script>
+
+</body>
+</html>

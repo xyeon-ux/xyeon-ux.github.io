@@ -1,0 +1,1708 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Portfolio — 2026.05</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #f9f9f9;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    color: #17191a;
+    overflow: hidden;
+  }
+  /* Stage scales the fixed 1920×1080 canvas to any viewport */
+  #viewport {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+  }
+  #stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background: #f9f9f9;
+    overflow: hidden;
+    transform-origin: center center;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Top nav ---------- */
+  .avatar-wrap {
+    position: absolute;
+    left: 670px; top: 48px;
+    width: 92px; height: 92px;
+    z-index: 30;
+  }
+  .avatar {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: #fff url(./assets/avatar.png) center / cover no-repeat;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    cursor: pointer;
+  }
+  .avatar-tooltip {
+    position: absolute;
+    top: 108px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 14px 14px 22px;
+    background: #ffffff;
+    color: #17191a;
+    border-radius: 20px;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    font-size: 18px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+    box-shadow: 0 22px 44px -14px rgba(0,0,0,0.22),
+                0 6px 16px -6px rgba(0,0,0,0.10);
+    z-index: 40;
+  }
+  .avatar-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 14px; height: 14px;
+    background: #ffffff;
+    border-radius: 3px;
+  }
+  .avatar-wrap.is-open .avatar-tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .tip-label {
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: rgba(0,0,0,0.45);
+  }
+  .tip-email {
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    font-weight: 500;
+    color: #17191a;
+    letter-spacing: 0.01em;
+  }
+  .tip-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.06);
+    border: none;
+    color: #17191a;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+    padding: 0;
+  }
+  .tip-copy:hover { background: rgba(0,0,0,0.10); }
+  .tip-copy:active { background: rgba(0,0,0,0.14); }
+  .tip-copy.copied {
+    background: #d97757;
+    color: #ffffff;
+  }
+  .tip-copy svg {
+    width: 18px; height: 18px;
+    display: block;
+  }
+  .nav {
+    position: absolute;
+    left: 787px; top: 52px;
+    height: 84px;
+    background: #ffffff;
+    border-radius: 26px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 13px;
+    gap: 4px;
+    width: max-content;
+  }
+  .nav-item {
+    height: 58px;
+    padding: 0 28px;
+    border-radius: 16px;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 25.4px;
+    line-height: 1;
+    color: #8c8c8c;
+    cursor: pointer;
+    user-select: none;
+    transition: background .25s ease, color .25s ease;
+  }
+  .nav-item:hover { color: #17191a; }
+  .nav-item.is-active {
+    background: #eaeaea;
+    color: #000;
+  }
+
+  /* ---------- Bento card base ---------- */
+  .card {
+    position: absolute;
+    border-radius: 28px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1.05),
+                box-shadow .35s ease,
+                opacity .4s ease;
+    will-change: transform;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 48px -18px rgba(0,0,0,0.22);
+  }
+  .card:active { transform: translateY(-2px) scale(.997); }
+
+  /* ---------- velog card ---------- */
+  .card-velog {
+    left: 271px; top: 179px;
+    width: 259px; height: 269px;
+    background: #d1d1d1;
+  }
+  .card-velog .logo {
+    position: absolute;
+    left: 36px; top: 104px;
+    width: 187px; height: 61px;
+  }
+  .card-velog .logo img { width: 100%; height: 100%; display: block; }
+
+  /* ---------- Behance card ---------- */
+  .card-behance {
+    left: 271px; top: 472px;
+    width: 259px; height: 270px;
+    background: #e9e9e9;
+  }
+  .card-behance .logo {
+    position: absolute;
+    left: 52px; top: 85px;
+    width: 159px; height: 99px;
+  }
+  .card-behance .logo img.a {
+    position: absolute; left: 0; top: 0;
+    width: 80.879px; height: 96.536px;
+  }
+  .card-behance .logo img.b {
+    position: absolute; left: 87.879px; top: 6.656px;
+    width: 69.208px; height: 92.299px;
+  }
+
+  /* ---------- UX is cute card ---------- */
+  .card-ux {
+    left: 554px; top: 179px;
+    width: 783px; height: 269px;
+    background: #ffffff;
+  }
+  .card-ux .title {
+    position: absolute;
+    left: 44px; top: 25px;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1;
+    color: #17191a;
+    letter-spacing: -0.02em;
+  }
+  .card-ux .emoji-row {
+    position: absolute;
+    left: 0; top: 121px;
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+  }
+  .card-ux .emoji-track {
+    position: absolute;
+    left: 35px; top: 0;
+    height: 120px;
+    white-space: nowrap;
+    animation: ux-scroll 22s linear infinite;
+    will-change: transform;
+  }
+  .card-ux .emoji-track .em {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    margin-right: 32px;
+    line-height: 120px;
+    text-align: center;
+    font-size: 96px;
+    vertical-align: middle;
+  }
+  @keyframes ux-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-760px); }
+  }
+  .card-ux:hover .emoji-track {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-ux .emoji-track { animation: none; }
+  }
+
+  /* ---------- iPhones card ---------- */
+  .card-iphones {
+    left: 554px; top: 472px;
+    width: 379.5px; height: 270px;
+    background: #eaeaea;
+  }
+  .card-iphones img {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 100%; height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* ---------- JAJAK macbook card ---------- */
+  .card-jajak {
+    left: 957.5px; top: 472px;
+    width: 379.5px; height: 511px;
+    background: #eaeaea;
+  }
+  .card-jajak .wordmark {
+    position: absolute;
+    left: 63.5px; top: 49px;
+    width: 253.1px;
+    height: 60.617px;
+  }
+  .card-jajak .wordmark img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .card-jajak .macbook {
+    position: absolute;
+    left: 50%; top: 140px;
+    width: 342px; height: 355px;
+    transform: translateX(-50%);
+  }
+  .card-jajak .macbook img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* ---------- Frenemies card ---------- */
+  .card-frenemies {
+    left: 271px; top: 766px;
+    width: 662px; height: 217px;
+    background: #ffffff;
+  }
+  .card-frenemies .text {
+    position: absolute;
+    left: 25px; top: 0; bottom: 0;
+    width: 612px;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 68px;
+    line-height: 1.08;
+    color: #17191a;
+    letter-spacing: -0.02em;
+    z-index: 2;
+  }
+  .card-frenemies .sparkle {
+    position: absolute;
+    left: 526.898px; top: 26.488px;
+    width: 102.292px; height: 106.972px;
+    z-index: 1;
+  }
+  .card-frenemies .sparkle img { width: 100%; height: 100%; display: block; }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ---------- Moonshot card ---------- */
+  .card-moonshot {
+    left: 1361px; top: 179px;
+    width: 259px; height: 496px;
+    background: #eaeaea;
+  }
+  .card-moonshot .bg {
+    position: absolute;
+    inset: 0;
+    background: url(./assets/rocket.png) center / cover no-repeat;
+  }
+  .card-moonshot .word {
+    position: absolute;
+    left: 24px; top: 218px;
+    width: 211px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.245;
+    color: #ffffff;
+    text-shadow: 0 4px 4px rgba(0,0,0,0.25);
+  }
+
+  /* ---------- Coming-soon spinner card ---------- */
+  .card-soon {
+    left: 1361px; top: 699px;
+    width: 259px; height: 284px;
+    background: #ffffff;
+    border: 3px dashed #d6d6d6;
+  }
+  .card-soon .spinner {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 121px; height: 121px;
+    transform: translate(-50%, -50%);
+  }
+  .card-soon .spinner span {
+    position: absolute;
+    left: 50%; top: 0;
+    width: 9px; height: 28px;
+    margin-left: -4.5px;
+    border-radius: 4.5px;
+    background: #a3a3a3;
+    transform-origin: 50% 60.5px;
+  }
+  .card-soon .soon-overlay {
+    position: absolute;
+    inset: -3px;
+    border-radius: 28px;
+    background: rgba(17,19,20,0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 26px;
+    text-align: center;
+    color: #ffffff;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+  }
+  .card-soon:hover .soon-overlay,
+  .card-soon:focus-visible .soon-overlay {
+    opacity: 1;
+  }
+
+  /* ---------- Toast (copy confirmation) ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 48px;
+    transform: translateX(-50%) translateY(16px);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px 14px 20px;
+    background: #17191a;
+    color: #ffffff;
+    border-radius: 999px;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 1000;
+    box-shadow: 0 22px 44px -14px rgba(0,0,0,0.40),
+                0 8px 16px -8px rgba(0,0,0,0.20);
+  }
+  .toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast .toast-icon {
+    width: 20px; height: 20px;
+    display: block;
+    color: #d97757;
+  }
+
+  /* ---------- Focus / a11y ---------- */
+  .card:focus-visible {
+    outline: 3px solid #17191a;
+    outline-offset: 4px;
+  }
+
+  /* ===================================================================
+     About Me — modal overlay (lives OUTSIDE the scaled stage so its
+     type stays at a readable, unscaled size).
+     =================================================================== */
+  .am-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 24px;
+    background: rgba(17,19,20,0.42);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+    overflow: hidden;
+  }
+  .am-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .am-modal {
+    position: relative;
+    width: min(880px, 100%);
+    max-height: 100%;
+    background: #f7f7f7;
+    border-radius: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,0.5);
+    transform: translateY(18px) scale(.985);
+    transition: transform .32s cubic-bezier(.2,.7,.2,1.02);
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    color: #17191a;
+  }
+  .am-overlay.is-open .am-modal {
+    transform: translateY(0) scale(1);
+  }
+  .am-modal::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+  .am-close {
+    position: sticky;
+    top: 28px;
+    float: left;
+    margin: 28px 0 -28px 36px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 4px 14px -4px rgba(0,0,0,0.18);
+    color: #17191a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .am-close:hover { background: #ececec; transform: rotate(90deg); }
+  .am-close svg { width: 20px; height: 20px; display: block; }
+
+  /* ---------- Header ---------- */
+  .am-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 56px 56px 8px;
+  }
+  .am-head-left { padding-top: 6px; }
+  .am-title {
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+  }
+  .am-contact {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 6px 16px;
+    font-size: 16px;
+  }
+  .am-contact dt {
+    color: rgba(0,0,0,0.42);
+    font-weight: 600;
+  }
+  .am-contact dd {
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .am-photo {
+    flex-shrink: 0;
+    width: 268px;
+    height: 196px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #e5e5e5 url(./assets/aboutme-photo.png) center / cover no-repeat;
+    box-shadow: 0 8px 22px -10px rgba(0,0,0,0.25);
+  }
+
+  /* ---------- Body: sticky index + content ---------- */
+  .am-body {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 8px;
+    padding: 24px 56px 56px;
+  }
+  .am-index {
+    position: sticky;
+    top: 28px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+  }
+  .am-index a {
+    display: block;
+    padding: 7px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.40);
+    text-decoration: none;
+    transition: color .18s ease;
+    cursor: pointer;
+  }
+  .am-index a:hover { color: #17191a; }
+  .am-index a.is-active {
+    color: #17191a;
+    font-weight: 700;
+  }
+
+  .am-content { min-width: 0; }
+  .am-section { scroll-margin-top: 24px; }
+  .am-section + .am-section { margin-top: 44px; }
+  .am-sec-title {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    border-bottom: 3px solid #17191a;
+    padding-bottom: 3px;
+    margin: 0 0 22px;
+  }
+
+  /* white content cards */
+  .am-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 32px;
+    box-shadow: 0 2px 10px -6px rgba(0,0,0,0.10);
+  }
+  .am-card + .am-card { margin-top: 16px; }
+
+  .am-intro-lead {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    color: #17191a;
+  }
+  .am-intro-text {
+    font-size: 15.5px;
+    line-height: 1.72;
+    color: #43474a;
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .am-intro-text + .am-intro-text { margin-top: 12px; }
+  .am-intro-text strong { color: #17191a; font-weight: 700; }
+
+  .am-job-role {
+    font-size: 19px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .am-job-period {
+    font-size: 16px;
+    color: rgba(0,0,0,0.40);
+    font-weight: 500;
+    margin: 6px 0 0;
+  }
+  .am-proj-title {
+    font-size: 17px;
+    font-weight: 800;
+    margin: 24px 0 14px;
+    letter-spacing: -0.01em;
+  }
+  .am-proj-title code,
+  .am-proj-title .mono { font-family: inherit; }
+  .am-block { margin: 16px 0 0; }
+  .am-block-head {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .am-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .am-list li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: #43474a;
+    text-wrap: pretty;
+  }
+  .am-list li::before {
+    content: '·';
+    position: absolute;
+    left: 4px; top: -1px;
+    font-weight: 700;
+    color: #9a9da0;
+  }
+  .am-divider {
+    height: 1px;
+    background: #ececec;
+    margin: 28px 0;
+    border: none;
+  }
+
+  /* Design Method — label/value rows */
+  .am-method-row {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 18px;
+    padding: 16px 0;
+  }
+  .am-method-row + .am-method-row { border-top: 1px solid #f0f0f0; }
+  .am-method-row:first-child { padding-top: 0; }
+  .am-method-row:last-child { padding-bottom: 0; }
+  .am-method-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.40);
+    padding-top: 1px;
+  }
+  .am-method-val {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: #43474a;
+    text-wrap: pretty;
+  }
+  .am-method-val strong { color: #17191a; font-weight: 700; }
+
+  /* Certification / Award — date/desc rows */
+  .am-fact-row {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 18px;
+    padding: 16px 0;
+  }
+  .am-fact-row + .am-fact-row { border-top: 1px solid #f0f0f0; }
+  .am-fact-row:first-child { padding-top: 0; }
+  .am-fact-row:last-child { padding-bottom: 0; }
+  .am-fact-date {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.40);
+    letter-spacing: 0.01em;
+    padding-top: 1px;
+  }
+  .am-fact-desc {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #17191a;
+  }
+  .am-fact-sub {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6a6e71;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 720px) {
+    .am-header { flex-direction: column-reverse; padding: 48px 28px 8px; }
+    .am-photo { width: 100%; height: 180px; }
+    .am-body { grid-template-columns: 1fr; padding: 20px 28px 40px; }
+    .am-index {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-bottom: 8px;
+    }
+    .am-index a { padding-left: 0; margin-left: 0; }
+    .am-close { margin-left: 20px; }
+  }
+
+  /* ===================================================================
+     Meet my AI teammates — modal (rich case-study popup)
+     =================================================================== */
+  .ait-modal {
+    position: relative;
+    width: min(1000px, 100%);
+    max-height: 100%;
+    background: #f7f7f7;
+    border-radius: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,0.5);
+    transform: translateY(18px) scale(.985);
+    transition: transform .32s cubic-bezier(.2,.7,.2,1.02);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    color: #17191a;
+  }
+  .am-overlay.is-open .ait-modal { transform: translateY(0) scale(1); }
+  .ait-modal::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+  .ait-close {
+    position: sticky;
+    top: 28px;
+    margin: 28px 0 0 36px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 4px 14px -4px rgba(0,0,0,0.18);
+    color: #17191a;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 20;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .ait-close:hover { background: #ececec; transform: rotate(90deg); }
+  .ait-close svg { width: 20px; height: 20px; display: block; }
+
+  .ait-pad { padding: 18px 56px 8px; }
+  .ait-head-title {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #17191a;
+  }
+  .ait-head-title .sub { color: #17191a; }
+
+  /* ---- role cards ---- */
+  .ait-roles {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 36px 56px 8px;
+  }
+  .ait-role {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 30px 36px;
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .ait-role-left { display: flex; flex-direction: column; gap: 24px; }
+  .ait-role-id {
+    font-size: 30px; font-weight: 800; line-height: 1;
+    color: #c7c7c7; letter-spacing: -0.01em;
+  }
+  .ait-role-name {
+    font-size: 30px; font-weight: 800; line-height: 1;
+    color: #000; letter-spacing: -0.02em; margin-top: 4px;
+  }
+  .ait-icons { display: flex; flex-direction: row; gap: 16px; }
+  .ait-icon {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .ait-icon img { display: block; }
+  .ait-icon.tile-white { background: #fff; border: 1px solid #e8e8e8; }
+  .ait-icon.tile-light { background: #efefef; }
+  .ait-icon.tile-black { background: #000; }
+  .ait-icon.tile-cursor { background: #26241e; }
+  .ait-role-right { display: flex; flex-direction: column; gap: 22px; }
+  .ait-role-desc {
+    font-size: 19px; font-weight: 500; line-height: 1.5;
+    color: #17191a; text-wrap: pretty; margin: 0;
+  }
+  .ait-pills { display: flex; flex-direction: row; flex-wrap: wrap; gap: 14px; }
+  .ait-pill {
+    background: #e8e8e8;
+    border-radius: 999px;
+    padding: 9px 22px;
+    font-size: 18px;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  /* ---- dark chat section ---- */
+  .ait-dark {
+    background: #171717;
+    padding: 56px 56px 64px;
+    margin-top: 36px;
+  }
+  .ait-dark-emoji { font-size: 40px; line-height: 1; margin: 0 0 12px; }
+  .ait-dark-title {
+    font-size: 36px; font-weight: 800; line-height: 1.1;
+    color: #fff; margin: 0 0 22px; letter-spacing: -0.01em;
+  }
+  .ait-dark-intro {
+    font-size: 18px; font-weight: 500; line-height: 1.6;
+    color: #fff; margin: 0 0 44px; text-wrap: pretty;
+  }
+  .ait-chat { display: flex; flex-direction: column; gap: 34px; }
+  .ait-msg { display: flex; gap: 16px; align-items: flex-end; max-width: 100%; }
+  .ait-msg.ai { justify-content: flex-start; }
+  .ait-msg.user { flex-direction: row-reverse; }
+  .ait-ava { width: 64px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .ait-ava-pics { display: flex; }
+  .ait-ava-pics .pic { width: 56px; height: 56px; border-radius: 50%; background: #fff center / cover no-repeat; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .ait-ava-pics .pic + .pic { margin-left: -18px; }
+  .ait-ava-pics .pic img { display: block; }
+  .ait-ava-label { font-size: 14px; font-weight: 700; color: #fff; text-align: center; }
+  .ait-bubble {
+    max-width: 560px;
+    border-radius: 20px;
+    padding: 16px 22px;
+    font-size: 17px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .ait-bubble.user { background: #ffd65b; color: #17191a; font-weight: 700; border-bottom-right-radius: 6px; }
+  .ait-bubble.ai { background: #fff; color: #17191a; font-weight: 500; border-bottom-left-radius: 6px; }
+  .ait-shot {
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 560px;
+    display: block;
+    box-shadow: 0 10px 30px -12px rgba(0,0,0,0.5);
+  }
+  .ait-shot.in-yellow { background: #ffd65b; padding: 14px; border-radius: 22px; }
+  .ait-shot img { display: block; width: 100%; border-radius: 12px; }
+
+  /* ---- token section ---- */
+  .ait-tokens { padding: 56px 56px 60px; }
+  .ait-tok-emoji { font-size: 40px; line-height: 1; margin: 0 0 12px; }
+  .ait-tok-title {
+    font-size: 36px; font-weight: 800; line-height: 1;
+    color: #17191a; margin: 0 0 36px; letter-spacing: -0.01em;
+  }
+  .ait-tok-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .ait-tok-card { background: #fff; border-radius: 22px; padding: 30px 34px; }
+  .ait-tok-id { font-size: 28px; font-weight: 800; color: #c7c7c7; line-height: 1; }
+  .ait-tok-name { font-size: 28px; font-weight: 800; color: #000; line-height: 1; margin: 6px 0 22px; }
+  .ait-tok-body { font-size: 18px; font-weight: 500; line-height: 1.5; color: #17191a; text-wrap: pretty; margin: 0; }
+  .ait-tok-wide { background: #fff; border-radius: 22px; padding: 30px 34px; }
+  .ait-tok-wide-title { font-size: 28px; font-weight: 800; color: #000; line-height: 1; margin: 0 0 28px; }
+  .ait-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .ait-method-title { font-size: 20px; font-weight: 700; color: #000; text-decoration: underline; text-underline-offset: 4px; margin: 0 0 12px; }
+  .ait-method-body { font-size: 17px; font-weight: 500; line-height: 1.5; color: #17191a; text-wrap: pretty; margin: 0; }
+
+  @media (max-width: 760px) {
+    .ait-pad, .ait-roles, .ait-dark, .ait-tokens { padding-left: 26px; padding-right: 26px; }
+    .ait-role { grid-template-columns: 1fr; gap: 18px; }
+    .ait-tok-row { grid-template-columns: 1fr; }
+    .ait-methods { grid-template-columns: 1fr; gap: 22px; }
+    .ait-bubble, .ait-shot { max-width: 78vw; }
+    .ait-close { margin-left: 20px; }
+  }
+
+  /* ---------- PROJECT-mode dimming ---------- */
+  /* When the PROJECT tab is active, non-project cards fade back so the
+     actual project pieces (iPhones, JAJAK, Moonshot) read as the focus. */
+  #stage.is-project .about-card {
+    opacity: 0.3;
+  }
+  #stage.is-project .about-card:hover {
+    opacity: 0.55;
+  }
+</style>
+</head>
+<body>
+
+<div id="viewport">
+  <div id="stage" data-screen-label="00 Main">
+
+    <!-- Top nav -->
+    <div class="avatar-wrap">
+      <div class="avatar" role="img" aria-label="Designer avatar" tabindex="0"></div>
+      <div class="avatar-tooltip" role="tooltip">
+        <span class="tip-label">Contact</span>
+        <span class="tip-email">xyeon.ux@gmail.com</span>
+        <button class="tip-copy" type="button" aria-label="이메일 주소 복사">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Primary">
+      <div class="nav-item is-active" data-tab="about" tabindex="0" role="button">ABOUT</div>
+      <div class="nav-item" data-tab="project" tabindex="0" role="button">PROJECT</div>
+    </nav>
+
+    <!-- velog -->
+    <a class="card card-velog about-card" href="https://velog.io/@xyux99/posts" target="_blank" rel="noopener" aria-label="velog 글 모음 열기">
+      <div class="logo"><img src="./assets/velog.svg" alt="velog"></div>
+    </a>
+
+    <!-- Behance -->
+    <a class="card card-behance about-card" href="https://www.behance.net/xyeon-ux" target="_blank" rel="noopener" aria-label="Behance 프로필 열기">
+      <div class="logo">
+        <img class="a" src="./assets/behance-1.svg" alt="">
+        <img class="b" src="./assets/behance-2.svg" alt="">
+      </div>
+    </a>
+
+    <!-- UX is cute -->
+    <a class="card card-ux about-card" href="#ux" aria-label="About me 열기">
+      <div class="title">About me</div>
+      <div class="emoji-row" aria-hidden="true">
+        <div class="emoji-track">
+          <span class="em">🍔</span>
+          <span class="em">🍞</span>
+          <span class="em">🪗</span>
+          <span class="em">👻</span>
+          <span class="em">🥙</span>
+          <span class="em">🍔</span>
+          <span class="em">🍞</span>
+          <span class="em">🪗</span>
+          <span class="em">👻</span>
+          <span class="em">🥙</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- iPhones — Mailring X case study -->
+    <a class="card card-iphones" href="./MailringX.html" aria-label="Mailring X 케이스 스터디 열기">
+      <img src="./assets/iphones.png" alt="Mailring X 전화 수신 화면 목업">
+    </a>
+
+    <!-- JAJAK macbook -->
+    <a class="card card-jajak" href="./JAJAK.html" aria-label="JAJAK 케이스 스터디 열기">
+      <div class="wordmark"><img src="./assets/jajak-logo.svg" alt="JAJAK"></div>
+      <div class="macbook">
+        <img src="./assets/macbook-jajak.png" alt="JAJAK 서비스 맥북 목업">
+      </div>
+    </a>
+
+    <!-- Frenemies -->
+    <a class="card card-frenemies about-card" href="#frenemies" aria-label="Meet my AI teammates 케이스 스터디 열기">
+      <div class="text">Meet my AI teammates..</div>
+      <div class="sparkle" aria-hidden="true">
+        <img src="./assets/sparkle.svg" alt="">
+      </div>
+    </a>
+
+    <!-- Moonshot -->
+    <a class="card card-moonshot" href="./Moonshot.html" aria-label="Moonshot 케이스 스터디 열기">
+      <div class="bg"></div>
+      <div class="word">Moonshot</div>
+    </a>
+
+    <!-- Coming soon -->
+    <a class="card card-soon about-card" href="#soon" aria-label="작업중인 프로젝트">
+      <div class="spinner" aria-hidden="true">
+        <span style="transform:rotate(0deg);opacity:1"></span>
+        <span style="transform:rotate(30deg);opacity:.92"></span>
+        <span style="transform:rotate(60deg);opacity:.83"></span>
+        <span style="transform:rotate(90deg);opacity:.75"></span>
+        <span style="transform:rotate(120deg);opacity:.67"></span>
+        <span style="transform:rotate(150deg);opacity:.58"></span>
+        <span style="transform:rotate(180deg);opacity:.5"></span>
+        <span style="transform:rotate(210deg);opacity:.42"></span>
+        <span style="transform:rotate(240deg);opacity:.33"></span>
+        <span style="transform:rotate(270deg);opacity:.25"></span>
+        <span style="transform:rotate(300deg);opacity:.17"></span>
+        <span style="transform:rotate(330deg);opacity:.08"></span>
+      </div>
+      <div class="soon-overlay">New project in progress…</div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ========================= About Me modal ========================= -->
+<div class="am-overlay" id="amOverlay" role="dialog" aria-modal="true" aria-labelledby="amTitle" hidden>
+  <div class="am-modal" id="amModal">
+    <button class="am-close" type="button" id="amClose" aria-label="닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Header -->
+    <header class="am-header">
+      <div class="am-head-left">
+        <h2 class="am-title" id="amTitle">안녕하세요,<br>Product Designer<br>정시연입니다.</h2>
+        <dl class="am-contact">
+          <dt>Email.</dt><dd>xyeon.ux@gmail.com</dd>
+          <dt>Tel.</dt><dd>010-7194-3440</dd>
+        </dl>
+      </div>
+      <div class="am-photo" role="img" aria-label="정시연 프로필 사진"></div>
+    </header>
+
+    <!-- Body -->
+    <div class="am-body">
+      <nav class="am-index" id="amIndex" aria-label="섹션 목차">
+        <a href="#am-intro" data-target="am-intro">Introduce</a>
+        <a href="#am-exp" data-target="am-exp">Experience</a>
+        <a href="#am-method" data-target="am-method">Design Method</a>
+        <a href="#am-cert" data-target="am-cert">Certification</a>
+        <a href="#am-award" data-target="am-award">Award</a>
+      </nav>
+
+      <div class="am-content">
+        <!-- Introduce -->
+        <section class="am-section" id="am-intro">
+          <h3 class="am-sec-title">Introduce</h3>
+          <div class="am-card">
+            <p class="am-intro-lead">UX는 귀엽다.</p>
+            <p class="am-intro-text">UX 디자인을 접했을 때 '케밥 메뉴', '햄버거 메뉴', '와플 메뉴'처럼 <strong>음식 이름을 표준 용어로 사용하는 점</strong>이 논리와 엄밀함을 요구하는 분야에서 귀엽다고 생각했습니다.</p>
+            <p class="am-intro-text">그리고 이 귀여운 이름들이 UX의 본질, 즉 <strong>복잡한 것을 누구나 쉽고 직관적으로 전달하려는 태도</strong>를 그대로 담고 있다는 것을 깨달았습니다. 엄밀함을 추구하면서도 사람을 먼저 생각하는 그 점에 이끌려 UX 디자인을 시작하게 되었고, 이처럼 간단 명료하고 위트 있는 디자인을 지향합니다.</p>
+          </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="am-section" id="am-exp">
+          <h3 class="am-sec-title">Experience</h3>
+
+          <div class="am-card">
+            <p class="am-job-role">(주)팀플백 SW개발팀 UXUI 디자이너</p>
+            <p class="am-job-period">2025. 01 ~ 2025. 09 (9개월)</p>
+
+            <p class="am-proj-title">[ <span class="mono">`자작자작`</span> AI 글쓰기 교육 플랫폼 UX 개선]</p>
+
+            <div class="am-block">
+              <p class="am-block-head">1. 서비스 디자인 개선 및 표준화</p>
+              <ul class="am-list">
+                <li>교사·학생 VOC 수집 → 탐색 구조 개편 → 모바일 탐색 시간 76% 단축</li>
+                <li>교육청 납품 요건에 맞춘 커스텀 UI 디자인 (B2G 대응)</li>
+              </ul>
+            </div>
+            <div class="am-block">
+              <p class="am-block-head">2. 설계 및 기술 문서화 (Technical Documentation)</p>
+              <ul class="am-list">
+                <li>디자인 의도와 개발 효율을 고려한 QA 테스트 케이스 작성 — 기능, UXUI 두 관점 검수</li>
+                <li>신규 서비스 기획 참여 및 프로토타입 제작</li>
+              </ul>
+            </div>
+            <div class="am-block">
+              <p class="am-block-head">3. 브랜드 마케팅</p>
+              <ul class="am-list">
+                <li>서비스 홍보매뉴얼 영상 기획/제작으로 신규 고객 유입 경험 개선</li>
+                <li>광고 배너 및 박람회 홍보물 디자인 등 온/오프라인 마케팅 디자인 지원</li>
+              </ul>
+            </div>
+
+            <hr class="am-divider">
+
+            <p class="am-job-role">(주)옴니스토리 연구개발팀 UXUI 디자이너</p>
+            <p class="am-job-period">2023. 11 ~ 2024. 12 (1년 1개월)</p>
+
+            <p class="am-proj-title">[ <span class="mono">`Mailring X`</span> 이메일 기반 글로벌 전화 서비스 0→1 구축]</p>
+
+            <div class="am-block">
+              <p class="am-block-head">1. 모바일 앱(iOS/Android) 디자인</p>
+              <ul class="am-list">
+                <li>서비스 초기 기획 참여 및 전체 사용자 흐름 설계 → UI 기능 정의서 직접 작성으로 개발팀 리터치 최소화</li>
+                <li>Figma 프로토타이핑으로 실제 사용 환경과 동일한 인터랙션 개발 가이드 제시</li>
+              </ul>
+            </div>
+            <div class="am-block">
+              <p class="am-block-head">2. 운영 효율화를 위한 백오피스 설계</p>
+              <ul class="am-list">
+                <li>서비스 관리 및 데이터 모니터링을 위한 Admin UI 디자인, 브랜드 구축 및 마케팅 디자인 지원</li>
+              </ul>
+            </div>
+            <div class="am-block">
+              <p class="am-block-head">3. 서비스 아이덴티티 확립 — 로고(BI) 디자인 및 그래픽 시스템 수립</p>
+              <ul class="am-list">
+                <li>신규 유입을 위한 랜딩페이지 기획 디자인 및 마케팅 광고 소재(배너 등) 제작</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Design Method -->
+        <section class="am-section" id="am-method">
+          <h3 class="am-sec-title">Design Method</h3>
+          <div class="am-card">
+            <div class="am-method-row">
+              <div class="am-method-label">기획</div>
+              <div class="am-method-val"><strong>Perplexity, Claude</strong>를 활용해 산업군 트렌드와 사용자 선호도를 수집하고 디자인 시나리오 구조화</div>
+            </div>
+            <div class="am-method-row">
+              <div class="am-method-label">디자인</div>
+              <div class="am-method-val"><strong>Stitch와 Figma AI, Claude Design</strong>으로 초안을 생성, 반복 작업(레이어 네이밍, 더미 데이터 삽입 등)을 자동화하여 효율 향상</div>
+            </div>
+            <div class="am-method-row">
+              <div class="am-method-label">프로토타이핑</div>
+              <div class="am-method-val"><strong>Figma(lo-fi), Protopie(Hi-fi)</strong>를 마감 기한, 요구 사항에 맞게 선택하여 커뮤니케이션 이해도 향상 자료로 활용</div>
+            </div>
+            <div class="am-method-row">
+              <div class="am-method-label">QA</div>
+              <div class="am-method-val"><strong>Claude</strong>의 정교한 문맥 분석 및 문장 다듬기 역량으로 브랜드 톤앤매너에 맞춘 UX 라이팅과 <strong>Gemini</strong>의 구글 워크스페이스 연동을 활용하여 시험항목서 작성</div>
+            </div>
+            <div class="am-method-row">
+              <div class="am-method-label">홍보자료</div>
+              <div class="am-method-val"><strong>Midjourney</strong> 실사, 3D, 2D 일러스트 등 다양한 스타일로 제작하되 일관된 브랜드 아이덴티티를 유지하는 방식으로 활용, <strong>Adobe Suites</strong>로 그래픽, 홍보 영상 편집 작업</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Certification -->
+        <section class="am-section" id="am-cert">
+          <h3 class="am-sec-title">Certification</h3>
+          <div class="am-card">
+            <div class="am-fact-row">
+              <div class="am-fact-date">2026. 01</div>
+              <div class="am-fact-desc">Amplitude Academy Foundation 과정 수료<span class="am-fact-sub">Google Analytics Certification(GA4)</span></div>
+            </div>
+            <div class="am-fact-row">
+              <div class="am-fact-date">2025. 11</div>
+              <div class="am-fact-desc">데이터분석 준전문가(ADsP)</div>
+            </div>
+            <div class="am-fact-row">
+              <div class="am-fact-date">2023. 02</div>
+              <div class="am-fact-desc">자동차운전면허 2종 보통</div>
+            </div>
+            <div class="am-fact-row">
+              <div class="am-fact-date">2021. 03</div>
+              <div class="am-fact-desc">GTQ 1급</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Award -->
+        <section class="am-section" id="am-award">
+          <h3 class="am-sec-title">Award</h3>
+          <div class="am-card">
+            <div class="am-fact-row">
+              <div class="am-fact-date">2022. 11</div>
+              <div class="am-fact-desc">한국디자인학회 가을 대학생 학술대회 장려상<span class="am-fact-sub">미래 모습 아바타를 통한 바른 생활 습관 형성을 돕는 모바일 앱 제안 (Moonshot)</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Meet my AI teammates modal ===================== -->
+<div class="am-overlay" id="aiOverlay" role="dialog" aria-modal="true" aria-labelledby="aiTitle" hidden>
+  <div class="ait-modal" id="aiModal">
+    <button class="ait-close" type="button" id="aiClose" aria-label="닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Header -->
+    <header class="ait-pad">
+      <h2 class="ait-head-title" id="aiTitle">Meet my AI teammates..<br><span class="sub">저의 AI 팀원들을 소개합니다.</span></h2>
+    </header>
+
+    <!-- Role cards -->
+    <div class="ait-roles">
+      <!-- 01 -->
+      <div class="ait-role">
+        <div class="ait-role-left">
+          <div>
+            <div class="ait-role-id">01</div>
+            <div class="ait-role-name">리서처</div>
+          </div>
+          <div class="ait-icons">
+            <div class="ait-icon tile-light">
+              <svg width="38" height="38" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="gemA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4893fc"/><stop offset="0.5" stop-color="#969dff"/><stop offset="1" stop-color="#bd99fe"/></linearGradient></defs><path d="M12 1 C12.6 6.6 17.4 11.4 23 12 C17.4 12.6 12.6 17.4 12 23 C11.4 17.4 6.6 12.6 1 12 C6.6 11.4 11.4 6.6 12 1 Z" fill="url(#gemA)"/></svg>
+            </div>
+            <div class="ait-icon tile-white">
+              <img src="./assets/ai/perplexity.svg" alt="Perplexity" style="height:42px;width:auto;">
+            </div>
+          </div>
+        </div>
+        <div class="ait-role-right">
+          <p class="ait-role-desc">빠르고 넓게 훑는 역할입니다. 자료를 모아오고, 아이디어의 방향이 맞는지 초기 검증하는 데 활용합니다.</p>
+          <div class="ait-pills">
+            <span class="ait-pill">자료수집</span>
+            <span class="ait-pill">아이디어검증</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="ait-role">
+        <div class="ait-role-left">
+          <div>
+            <div class="ait-role-id">02</div>
+            <div class="ait-role-name">기획자 &amp; 편집자</div>
+          </div>
+          <div class="ait-icons">
+            <div class="ait-icon" style="background:#fff url(./assets/ai/claude.png) center/cover;"></div>
+          </div>
+        </div>
+        <div class="ait-role-right">
+          <p class="ait-role-desc">아이디어 구조화, UX writing 추천, 수작업 디자인 피드백, 기능 명세서/QA 시트 초안까지 기획의 전 과정에서 활용합니다.</p>
+          <div class="ait-pills">
+            <span class="ait-pill">UX writing</span>
+            <span class="ait-pill">QA Sheet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="ait-role">
+        <div class="ait-role-left">
+          <div>
+            <div class="ait-role-id">03</div>
+            <div class="ait-role-name">자동화 엔지니어</div>
+          </div>
+          <div class="ait-icons">
+            <div class="ait-icon tile-black">
+              <img src="./assets/ai/claudecode.svg" alt="Claude Code" style="width:38px;height:auto;">
+            </div>
+          </div>
+        </div>
+        <div class="ait-role-right">
+          <p class="ait-role-desc">디자인 툴 밖의 워크플로우입니다. 로컬 파일 정리, 리서치 자료 분석 등 반복되는 작업을 자동화합니다.</p>
+          <div class="ait-pills">
+            <span class="ait-pill">로컬 파일 정리</span>
+            <span class="ait-pill">자료 분석</span>
+            <span class="ait-pill">반복 작업 자동화</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div class="ait-role">
+        <div class="ait-role-left">
+          <div>
+            <div class="ait-role-id">04</div>
+            <div class="ait-role-name">UI 디자이너</div>
+          </div>
+          <div class="ait-icons">
+            <div class="ait-icon tile-black"><img src="./assets/ai/figma.png" alt="Figma" style="height:42px;width:auto;"></div>
+            <div class="ait-icon" style="background:#000 url(./assets/ai/stitch.png) center/cover;"></div>
+            <div class="ait-icon" style="background:#fff url(./assets/ai/claude.png) center/cover;"></div>
+          </div>
+        </div>
+        <div class="ait-role-right">
+          <p class="ait-role-desc">AI가 초안을 잡아주면, 저는 그것을 바탕으로 방향을 판단하고 발전시킵니다. 빈 캔버스에서 고민하지 않고, AI를 출발점으로 활용하여 빠르게 작업에 착수, 진행이 가능해졌습니다.</p>
+          <div class="ait-pills">
+            <span class="ait-pill">UI초안생성</span>
+            <span class="ait-pill">디자인 탐색</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 -->
+      <div class="ait-role">
+        <div class="ait-role-left">
+          <div>
+            <div class="ait-role-id">05</div>
+            <div class="ait-role-name">비주얼 디자이너</div>
+          </div>
+          <div class="ait-icons">
+            <div class="ait-icon" style="background:#fff url(./assets/ai/midjourney.png) center/cover;"></div>
+          </div>
+        </div>
+        <div class="ait-role-right">
+          <p class="ait-role-desc">제가 컨셉과 방향을 찾아서 제시하고, 이미지 생성은 미드저니에게 맡깁니다. 3D,2D 등 여러 스타일의 홍보 이미지를 프롬프트로 디렉팅하여 만들어냅니다.</p>
+          <div class="ait-pills">
+            <span class="ait-pill">3D 이미지</span>
+            <span class="ait-pill">2D 홍보물</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06 -->
+      <div class="ait-role">
+        <div class="ait-role-left">
+          <div>
+            <div class="ait-role-id">06</div>
+            <div class="ait-role-name">프론트엔드 개발자</div>
+          </div>
+          <div class="ait-icons">
+            <div class="ait-icon tile-cursor" style="position:relative;">
+              <img src="./assets/ai/cursor-1.svg" alt="" style="position:absolute;left:11px;top:8px;width:41px;height:auto;">
+              <img src="./assets/ai/cursor-2.svg" alt="Cursor" style="position:absolute;left:13px;top:21px;width:38px;height:auto;">
+            </div>
+            <div class="ait-icon tile-black">
+              <img src="./assets/ai/claudecode.svg" alt="Claude Code" style="width:38px;height:auto;">
+            </div>
+          </div>
+        </div>
+        <div class="ait-role-right">
+          <p class="ait-role-desc">완성한 디자인을 개발로 구현합니다. Cursor로 구현한 코드 파일을 Claude Code에게 파악시켜 에셋 정리 등 자동화를 구현합니다.</p>
+          <div class="ait-pills">
+            <span class="ait-pill">코드구현</span>
+            <span class="ait-pill">컴포넌트생성</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark chat section -->
+    <section class="ait-dark">
+      <div class="ait-dark-emoji">✍️</div>
+      <h3 class="ait-dark-title">포트폴리오 웹사이트 제작 과정</h3>
+      <p class="ait-dark-intro">이 웹사이트를 AI와 함께 만든 과정입니다. 아이디어를 제안하고, 시안을 받아 실제 그리드 구현 느낌을 살피고, 디자인을 진행하여 HTML로 구현을 요청했습니다. 코드 구현 후 인터랙션은 대화를 통해 쉽게 조정하여 프로토타이핑 과정을 줄일 수 있었습니다.</p>
+
+      <div class="ait-chat">
+        <!-- user -->
+        <div class="ait-msg user">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic"><img src="./assets/avatar.png" alt="" style="width:44px;height:44px;"></span></div>
+            <div class="ait-ava-label">시연</div>
+          </div>
+          <div class="ait-bubble user">포함할 프로젝트 선정, 레이아웃 형태(bento grid) 결정했는데 포트폴리오용 웹사이트로 사용하기 적합한지 검증해줘.</div>
+        </div>
+
+        <!-- ai -->
+        <div class="ait-msg ai">
+          <div class="ait-ava">
+            <div class="ait-ava-pics">
+              <span class="pic"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="gemB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4893fc"/><stop offset="0.5" stop-color="#969dff"/><stop offset="1" stop-color="#bd99fe"/></linearGradient></defs><path d="M12 1 C12.6 6.6 17.4 11.4 23 12 C17.4 12.6 12.6 17.4 12 23 C11.4 17.4 6.6 12.6 1 12 C6.6 11.4 11.4 6.6 12 1 Z" fill="url(#gemB)"/></svg></span>
+              <span class="pic" style="background:#fff url(./assets/ai/claude.png) center/cover;"></span>
+            </div>
+            <div class="ait-ava-label">AI</div>
+          </div>
+          <div class="ait-bubble ai">네, 적합합니다. 이유는 네 가지입니다: 작업물의 시각적 위계 형성, 디자인 감각 어필, 다양한 콘텐츠 수용, 트렌디한 인상. 카드 크기별로 대표 프로젝트·자기소개·스킬·프로세스 이미지 등을 나눠 배치하는 구성도 가능합니다.</div>
+        </div>
+
+        <!-- user -->
+        <div class="ait-msg user">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic"><img src="./assets/avatar.png" alt="" style="width:44px;height:44px;"></span></div>
+            <div class="ait-ava-label">시연</div>
+          </div>
+          <div class="ait-bubble user">전체 섹션은 8개로 구성하고, 레퍼런스 이미지 참고해서 초안 생성해줘.</div>
+        </div>
+
+        <!-- ai screenshot -->
+        <div class="ait-msg ai">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic" style="background:#000;"><img src="./assets/ai/figma.png" alt="" style="height:30px;width:auto;"></span></div>
+            <div class="ait-ava-label">AI</div>
+          </div>
+          <div class="ait-shot"><img src="./assets/ai/shot-figma.png" alt="AI가 생성한 디자인 시안"></div>
+        </div>
+
+        <!-- user screenshot + text -->
+        <div class="ait-msg user">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic"><img src="./assets/avatar.png" alt="" style="width:44px;height:44px;"></span></div>
+            <div class="ait-ava-label">시연</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-end;">
+            <div class="ait-shot in-yellow"><img src="./assets/ai/shot-bento-yellow.png" alt="레퍼런스 벤토 그리드"></div>
+            <div class="ait-bubble user">이 Figma 파일의 디자인을 html로 구현해줘.</div>
+          </div>
+        </div>
+
+        <!-- ai screenshot + text -->
+        <div class="ait-msg ai">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic" style="background:#fff url(./assets/ai/claude.png) center/cover;"></span></div>
+            <div class="ait-ava-label">AI</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start;">
+            <div class="ait-shot"><img src="./assets/ai/shot-bento-white.png" alt="구현된 포트폴리오 화면"></div>
+            <div class="ait-bubble ai">완료했습니다.</div>
+          </div>
+        </div>
+
+        <!-- user -->
+        <div class="ait-msg user">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic"><img src="./assets/avatar.png" alt="" style="width:44px;height:44px;"></span></div>
+            <div class="ait-ava-label">시연</div>
+          </div>
+          <div class="ait-bubble user">이 코드 파일에서 bundler의 역할은 뭐야? 그리고 중복된 화면의 파일이 많은데 왜 생성된 건지, 삭제해도 되는지 알려줘.</div>
+        </div>
+
+        <!-- ai -->
+        <div class="ait-msg ai">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic" style="background:#000;"><img src="./assets/ai/claudecode.svg" alt="" style="width:30px;height:auto;"></span></div>
+            <div class="ait-ava-label">AI</div>
+          </div>
+          <div class="ait-bubble ai">4개 파일 모두 삭제해도 됩니다. 단, 한 가지 예외가 있습니다.<br><br>· <strong>-standalone 2개</strong> → 실제 페이지와 거의 동일한 중복 파일이므로 바로 삭제 가능<br>· <strong>Portfolio Main.html / JAJAK.html</strong> → 모든 리소스가 내장된 오프라인 단일 파일 버전입니다. 인터넷 없이 혼자 열거나 단일 파일로 공유해야 한다면 보관 가치가 있습니다. 그런 목적이 없다면 삭제하셔도 됩니다.<br><br>삭제 진행해 드릴까요?</div>
+        </div>
+
+        <!-- user -->
+        <div class="ait-msg user">
+          <div class="ait-ava">
+            <div class="ait-ava-pics"><span class="pic"><img src="./assets/avatar.png" alt="" style="width:44px;height:44px;"></span></div>
+            <div class="ait-ava-label">시연</div>
+          </div>
+          <div class="ait-bubble user">코드 구조를 파악하고, GitHub에 배포를 완료했다!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Token section -->
+    <section class="ait-tokens">
+      <div class="ait-tok-emoji">💸</div>
+      <h3 class="ait-tok-title">토큰을 아끼는 법</h3>
+      <div class="ait-tok-row">
+        <div class="ait-tok-card">
+          <div class="ait-tok-id">01</div>
+          <div class="ait-tok-name">응답 형태 명시</div>
+          <p class="ait-tok-body">불필요한 인사말(안녕, 고마워 등), 중복 설명, 과도한 배경 정보를 줄이고, 원하는 응답 형태(형식, 길이, 범위)를 구체적으로 지시한다. "3줄 이내로", "코드만, 설명 제외" 같은 지시가 효율적으로 응답을 도출할 수 있다.<br>→ 설정에서 응답 형태 지정 가능</p>
+        </div>
+        <div class="ait-tok-card">
+          <div class="ait-tok-id">02</div>
+          <div class="ait-tok-name">맥락 관리</div>
+          <p class="ait-tok-body">프로젝트를 생성해서 대화를 저장하여 맥락을 유지하며 새로운 채팅을 활용하며, 새 주제엔 새 대화창을 열되, 맥락이 필요할 땐 압축해서 이전한다.<br>→ 아래 맥락 관리 3가지 방법 참고</p>
+        </div>
+      </div>
+      <div class="ait-tok-wide">
+        <div class="ait-tok-wide-title">맥락을 관리하는 3가지 방법</div>
+        <div class="ait-methods">
+          <div>
+            <div class="ait-method-title">맥락 압축 이전</div>
+            <p class="ait-method-body">대화 마무리 시 "다음 작업에 필요한 정보만 50단어로 정리해줘"라고 요청 → 일상 대화나 실패한 시도는 제외하도록 명시하는 것이 중요!</p>
+          </div>
+          <div>
+            <div class="ait-method-title">컨텍스트 스니펫</div>
+            <p class="ait-method-body">자주 쓰는 프로젝트 배경(기술 스택, 목표, 선호 스타일)을 메모장에 저장해두고 새 대화 시작 시 붙여넣는다.</p>
+          </div>
+          <div>
+            <div class="ait-method-title">직접 정리하기</div>
+            <p class="ait-method-body">목표 / 현재 상태 / 막힌 부분, 이 세 가지를 본인이 직접 생각하고 정리하는 시간을 가진다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span class="toast-text">정시연 님 이메일을 복사했습니다.</span>
+</div>
+
+<script>
+  // Letterbox-scale the 1920×1080 stage to fit any viewport
+  const stage = document.getElementById('stage');
+  function fit() {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const s = Math.min(vw / 1920, vh / 1080);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  // Make every card behave like a link; click logs to console as a stand-in
+  // for routing into a detail page (the user mentioned each block opens a
+  // detail page — wire to real routes when those exist).
+  document.querySelectorAll('.card').forEach(c => {
+    c.addEventListener('click', (e) => {
+      const key = (c.getAttribute('href') || '').replace('#','');
+      console.log('[portfolio] open detail:', key);
+    });
+  });
+
+  /* ===================== About Me modal ===================== */
+  const amOverlay = document.getElementById('amOverlay');
+  const amModal   = document.getElementById('amModal');
+  const amClose   = document.getElementById('amClose');
+  const amIndex   = document.getElementById('amIndex');
+  const uxCard    = document.querySelector('.card-ux');
+  let amLastFocus = null;
+
+  function openAbout(e) {
+    if (e) { e.preventDefault(); }
+    amLastFocus = document.activeElement;
+    amOverlay.hidden = false;
+    // next frame so the transition runs
+    requestAnimationFrame(() => {
+      amOverlay.classList.add('is-open');
+    });
+    amModal.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    amClose.focus();
+    syncIndex();
+  }
+  function closeAbout() {
+    amOverlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    setTimeout(() => { amOverlay.hidden = true; }, 300);
+    if (amLastFocus && amLastFocus.focus) amLastFocus.focus();
+  }
+
+  uxCard.addEventListener('click', openAbout);
+  amClose.addEventListener('click', closeAbout);
+  amOverlay.addEventListener('click', (e) => {
+    if (e.target === amOverlay) closeAbout();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !amOverlay.hidden) closeAbout();
+  });
+
+  // Index → smooth-scroll the modal to the chosen section (no scrollIntoView)
+  const amLinks = Array.from(amIndex.querySelectorAll('a'));
+  const amSections = amLinks.map(a => document.getElementById(a.dataset.target));
+  amLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(link.dataset.target);
+      if (!target) return;
+      const top = target.offsetTop - 24;
+      amModal.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    });
+  });
+
+  // Scroll-spy: highlight the index entry for the section occupying the
+  // most of the visible area. This works even for trailing sections that
+  // can never scroll all the way to the top.
+  function syncIndex() {
+    const viewTop = amModal.scrollTop;
+    const viewBottom = viewTop + amModal.clientHeight;
+    let best = 0, bestVis = -1;
+    amSections.forEach((sec, i) => {
+      if (!sec) return;
+      const top = sec.offsetTop;
+      const bottom = top + sec.offsetHeight;
+      const vis = Math.min(bottom, viewBottom) - Math.max(top, viewTop);
+      if (vis > bestVis) { bestVis = vis; best = i; }
+    });
+    amLinks.forEach((l, i) => l.classList.toggle('is-active', i === best));
+  }
+  amModal.addEventListener('scroll', syncIndex, { passive: true });
+
+  /* ===================== Meet my AI teammates modal ===================== */
+  const aiOverlay = document.getElementById('aiOverlay');
+  const aiModal   = document.getElementById('aiModal');
+  const aiClose   = document.getElementById('aiClose');
+  const aiCard    = document.querySelector('.card-frenemies');
+  let aiLastFocus = null;
+
+  function openAI(e) {
+    if (e) { e.preventDefault(); }
+    aiLastFocus = document.activeElement;
+    aiOverlay.hidden = false;
+    requestAnimationFrame(() => aiOverlay.classList.add('is-open'));
+    aiModal.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    aiClose.focus();
+  }
+  function closeAI() {
+    aiOverlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    setTimeout(() => { aiOverlay.hidden = true; }, 300);
+    if (aiLastFocus && aiLastFocus.focus) aiLastFocus.focus();
+  }
+
+  aiCard.addEventListener('click', openAI);
+  aiClose.addEventListener('click', closeAI);
+  aiOverlay.addEventListener('click', (e) => { if (e.target === aiOverlay) closeAI(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !aiOverlay.hidden) closeAI();
+  });
+
+  // Top-nav segmented control. Active state moves via class swap, frame
+  // width stays constant because both labels share padding/height.
+  // PROJECT mode also dims the about-cards via `.is-project` on the stage.
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    const activate = () => {
+      navItems.forEach(i => i.classList.toggle('is-active', i === item));
+      stage.classList.toggle('is-project', item.dataset.tab === 'project');
+    };
+    item.addEventListener('click', activate);
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  // Avatar tooltip — click to toggle (was hover).
+  const avatarWrap = document.querySelector('.avatar-wrap');
+  const avatarEl = document.querySelector('.avatar');
+  avatarEl.addEventListener('click', (e) => {
+    e.stopPropagation();
+    avatarWrap.classList.toggle('is-open');
+  });
+  avatarEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      avatarWrap.classList.toggle('is-open');
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!avatarWrap.contains(e.target)) {
+      avatarWrap.classList.remove('is-open');
+    }
+  });
+
+  // Avatar tooltip — copy-to-clipboard button. On success show a toast.
+  const copyBtn = document.querySelector('.tip-copy');
+  const toastEl = document.getElementById('toast');
+  const EMAIL = 'xyeon.ux@gmail.com';
+  let toastTimer;
+  function showToast() {
+    toastEl.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('is-visible'), 2200);
+  }
+  copyBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(EMAIL);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = EMAIL;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      copyBtn.classList.add('copied');
+      showToast();
+      setTimeout(() => copyBtn.classList.remove('copied'), 1400);
+    } catch (err) {
+      console.warn('[portfolio] copy failed', err);
+    }
+  });
+</script>
+
+</body>
+</html>

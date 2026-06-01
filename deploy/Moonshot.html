@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Moonshot — Case Study</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,700;1,800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #f9f9f9;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    color: #1a1a1a;
+    -webkit-text-size-adjust: 100%;
+  }
+  body { overflow-x: hidden; }
+
+  :root {
+    --orange: #FE5722;
+    --ink: #1a1a1a;
+    --muted: #8c8c8c;
+    --dark: #111010;
+  }
+
+  /* ---------- Fixed-width 1920 stage ---------- */
+  #stage-wrap { position: relative; width: 100%; overflow: hidden; }
+  #stage {
+    width: 1920px; position: absolute; top: 0; left: 50%;
+    margin-left: -960px; transform-origin: top center;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(249,249,249,0.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .topbar-inner { width: 100%; max-width: 1920px; height: 72px; margin: 0 auto; padding: 0 36px; display: flex; align-items: center; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px 10px 14px; background: #ffffff; border-radius: 999px;
+    text-decoration: none; color: #17191a; font-size: 15px; font-weight: 600;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .back:hover { transform: translateX(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .back svg { width: 16px; height: 16px; }
+
+  /* ---------- Section frame ---------- */
+  .section { width: 1920px; position: relative; padding: 0 252px; }
+  .kicker {
+    font-weight: 800; font-size: 32px; line-height: 1; color: var(--orange);
+    letter-spacing: 0.01em; margin: 0 0 24px;
+  }
+  .headline {
+    font-weight: 700; font-size: 44px; line-height: 1.35; color: var(--ink);
+    margin: 0 0 18px; letter-spacing: -0.015em;
+  }
+  .lead { font-weight: 500; font-size: 30px; line-height: 1.5; color: var(--muted); margin: 0; letter-spacing: -0.005em; }
+  .figure { width: 1920px; display: flex; justify-content: center; }
+  .figure img { display: block; height: auto; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-top: 104px; padding-bottom: 80px;
+    display: grid; grid-template-columns: 760px 1fr; gap: 40px; align-items: center;
+  }
+  .hero-text { display: flex; flex-direction: column; gap: 30px; }
+  .hero-headings { display: flex; flex-direction: column; gap: 14px; }
+  .hero-tagline { font-weight: 700; font-size: 32px; line-height: 1.2; color: var(--orange); letter-spacing: -0.01em; }
+  .hero-title { font-weight: 800; font-size: 104px; line-height: 1; color: var(--ink); margin: 0; letter-spacing: -0.03em; }
+  .role-tags { display: flex; gap: 12px; flex-wrap: wrap; }
+  .role-tags span {
+    height: 54px; padding: 0 24px; border-radius: 33px;
+    background: #ffffff; border: 1px solid #cfcfcf;
+    display: inline-flex; align-items: center; font-weight: 500; font-size: 24px; color: var(--ink);
+  }
+  .meta { margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .meta-row { display: grid; grid-template-columns: 120px 1fr; align-items: baseline; column-gap: 24px; }
+  .meta-row dt { font-weight: 500; font-size: 26px; color: var(--muted); margin: 0; }
+  .meta-row dd { margin: 0; font-weight: 700; font-size: 26px; color: var(--ink); line-height: 1.2; letter-spacing: -0.005em; }
+  .hero-visual { display: flex; align-items: center; justify-content: center; }
+  .hero-visual img { width: 660px; filter: drop-shadow(0 30px 56px rgba(0,0,0,0.12)); }
+
+  /* ---------- Overview ---------- */
+  .overview { padding-top: 70px; padding-bottom: 36px; }
+  .overview .headline { margin-bottom: 22px; }
+  .diagram-fig { margin: 40px 0 60px; }
+  .diagram-fig img { width: 1340px; }
+  .feature-card {
+    margin: 0 252px 96px; background: #ffffff; border-radius: 20px; padding: 40px 56px;
+    display: grid; grid-template-columns: 160px 1fr 1fr; column-gap: 40px; align-items: start;
+    box-shadow: 0 2px 18px rgba(0,0,0,0.03);
+  }
+  .feature-card .fc-label { font-weight: 700; font-size: 28px; color: var(--orange); padding-top: 4px; }
+  .feature-card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .feature-card li {
+    position: relative; padding-left: 30px; font-weight: 500; font-size: 27px;
+    line-height: 1.45; color: var(--ink); letter-spacing: -0.005em;
+  }
+  .feature-card li::before {
+    content: ''; position: absolute; left: 6px; top: 0.62em;
+    width: 9px; height: 9px; border-radius: 50%; background: var(--orange);
+  }
+
+  /* ---------- Field Research (dark, 2-col) ---------- */
+  .field {
+    background: var(--dark); padding: 100px 252px 100px;
+    display: grid; grid-template-columns: 480px 1fr; gap: 80px; align-items: start;
+  }
+  .field .kicker { color: var(--orange); }
+  .field .headline { color: #ffffff; font-size: 40px; line-height: 1.45; }
+  .field .lead { color: #b8b8b8; font-size: 26px; }
+  .field-fig { padding-top: 8px; }
+
+  /* Field Research — coded insight cluster */
+  .fi-pill {
+    display: inline-block;
+    background: var(--orange);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    padding: 14px 28px;
+    border-radius: 999px;
+    margin: 0 0 28px;
+  }
+  .fi-rows { display: flex; flex-direction: column; gap: 26px; }
+  .fi-row {
+    display: grid;
+    grid-template-columns: 1fr 64px 360px;
+    align-items: center;
+  }
+  .fi-voc {
+    background: #2e2b29;
+    border-radius: 16px;
+    padding: 24px 30px 28px;
+    text-align: center;
+  }
+  .fi-tag {
+    display: block;
+    font-weight: 600;
+    font-size: 21px;
+    color: #8f8b88;
+    margin-bottom: 12px;
+    letter-spacing: -0.005em;
+  }
+  .fi-voc p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 27px;
+    line-height: 1.3;
+    color: #f1efed;
+    letter-spacing: -0.01em;
+  }
+  .fi-conn {
+    position: relative;
+    height: 2px;
+    margin: 0 4px;
+  }
+  .fi-conn::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 14px; top: 50%;
+    border-top: 2px dotted var(--orange);
+  }
+  .fi-conn::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    width: 11px; height: 11px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--orange);
+  }
+  .fi-insight {
+    background: #fce7dd;
+    border: 1.5px solid rgba(254,87,34,0.5);
+    border-radius: 18px;
+    padding: 26px 24px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 27px;
+    color: var(--orange);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  /* ---------- Service Naming (rocket bg) ---------- */
+  .naming {
+    position: relative; width: 1920px; min-height: 1150px; overflow: hidden;
+    background: var(--dark);
+  }
+  .naming-bg {
+    position: absolute; inset: 0;
+    background: url(./assets/ms/bg-moonshot.png) center / cover no-repeat;
+    filter: grayscale(1) brightness(0.62) contrast(1.02);
+  }
+  .naming-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(17,16,16,0.86) 0%, rgba(17,16,16,0.52) 30%, rgba(17,16,16,0.52) 72%, rgba(17,16,16,0.92) 100%);
+  }
+  .naming-inner { position: relative; z-index: 2; padding: 80px 252px 100px; }
+  .naming .kicker { color: var(--orange); margin-bottom: 0; }
+  .naming-grid {
+    display: grid; grid-template-columns: 1fr 200px 1fr; align-items: center;
+    margin-top: 300px; min-height: 360px;
+  }
+  .naming-col { text-align: center; display: flex; flex-direction: column; gap: 32px; align-items: center; }
+  .naming-big {
+    font-family: "Montserrat", sans-serif; font-style: italic; font-weight: 800;
+    font-size: 64px; line-height: 1.05; color: var(--orange); letter-spacing: -0.01em;
+  }
+  .naming-sub { margin: 0; font-weight: 500; font-size: 27px; line-height: 1.5; color: #e6e6e6; letter-spacing: -0.005em; }
+  .naming-arrow { display: flex; align-items: center; justify-content: center; }
+  .naming-arrow svg { width: 170px; height: 40px; }
+
+  /* ---------- Desk Research ---------- */
+  .desk { padding-top: 96px; padding-bottom: 30px; }
+  .desk-fig { margin-top: 48px; padding-bottom: 70px; }
+
+  /* Desk Research — coded identity diagram */
+  .desk-diagram {
+    margin: 48px 252px 70px;
+    background: #f3f3f3;
+    border-radius: 32px;
+    padding: 56px 72px 64px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 168px 470px;
+    column-gap: 0;
+    align-items: center;
+  }
+  .dd-pill {
+    align-self: center;
+    background: var(--orange);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    padding: 16px 30px;
+    border-radius: 999px;
+    margin: 0 0 4px;
+  }
+  .dd-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .dd-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 34px 40px 38px;
+    text-align: center;
+  }
+  .dd-card h4 {
+    margin: 0 0 16px;
+    font-weight: 700;
+    font-size: 31px;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .dd-card p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.5;
+    color: #9a9a9a;
+    letter-spacing: -0.005em;
+  }
+  .dd-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .dd-arrow .dd-arrow-label {
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--orange);
+    letter-spacing: -0.01em;
+  }
+  .dd-arrow svg { width: 120px; height: 22px; display: block; }
+  .dd-circle {
+    width: 470px;
+    height: 470px;
+    border-radius: 50%;
+    background: #faf1ea;
+    border: 1.5px solid rgba(254,87,34,0.42);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 56px;
+    gap: 22px;
+  }
+  .dd-circle h4 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 33px;
+    line-height: 1.32;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .dd-circle p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.5;
+    color: #9a9a9a;
+    letter-spacing: -0.005em;
+  }
+
+  /* ---------- UI Design blocks ---------- */
+  .ui { padding-top: 96px; padding-bottom: 80px; }
+  .ui.alt { background: #fafafa; }
+  .ui-fig { margin-top: 60px; }
+
+  /* ---------- User Feedback ---------- */
+  .feedback { padding-top: 96px; padding-bottom: 130px; background: #fafafa; }
+  .feedback-fig { margin-top: 56px; }
+  .feedback-fig img { width: 1740px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="./index.html" aria-label="포트폴리오로 돌아가기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      <span>Portfolio</span>
+    </a>
+  </div>
+</header>
+
+<div id="stage-wrap">
+  <div id="stage" data-screen-label="Moonshot case study">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="section hero" data-screen-label="Hero">
+      <div class="hero-text">
+        <div class="hero-headings">
+          <span class="hero-tagline">미래 모습 아바타를 통한 바른 생활 습관 형성 서비스</span>
+          <h1 class="hero-title">Moonshot</h1>
+        </div>
+        <div class="role-tags">
+          <span>UX Planning(100%)</span>
+          <span>UI Design(100%)</span>
+        </div>
+        <dl class="meta">
+          <div class="meta-row"><dt>기간</dt><dd>2022.03 - 2022.09 (7개월, 졸업 작품)</dd></div>
+          <div class="meta-row"><dt>참여인원</dt><dd>디자이너 1명</dd></div>
+          <div class="meta-row"><dt>수상</dt><dd>한국디자인학회 가을 대학생 학술대회 장려상</dd></div>
+        </dl>
+      </div>
+      <div class="hero-visual">
+        <img src="./assets/ms/hero-phones.png" alt="Moonshot 앱 홈 화면과 커뮤니티 화면 목업">
+      </div>
+    </section>
+
+    <!-- ===================== OVERVIEW ===================== -->
+    <section class="section overview" data-screen-label="Overview">
+      <h2 class="kicker">Overview</h2>
+      <p class="headline">미래 모습 아바타를 통한 바른 생활 습관 형성 서비스</p>
+      <p class="lead">과도한 자기계발 문화에서 비롯된 인정 욕구, 상대적 박탈감, 강박에서 벗어나<br>개인 고유의 미래 비전을 기반으로 지속 가능한 습관과 루틴을 형성하도록 돕는 서비스입니다.</p>
+    </section>
+    <div class="figure diagram-fig">
+      <img src="./assets/ms/diagram-overview.png" alt="Moonshot와 개인 사용자의 관계도">
+    </div>
+    <div class="feature-card">
+      <div class="fc-label">주요 기능</div>
+      <ul>
+        <li>이상적 자아 기반 미래 모습 아바타 생성</li>
+        <li>일일 5분 챌린지로 습관 형성 지원</li>
+      </ul>
+      <ul>
+        <li>소셜 챌린지 개설 및 응원 메시지 기능</li>
+        <li>활동 데이터 분석 및 맞춤 피드백 제공</li>
+      </ul>
+    </div>
+
+    <!-- ===================== FIELD RESEARCH (dark) ===================== -->
+    <div class="field" data-screen-label="Field Research">
+      <div class="field-text">
+        <h2 class="kicker">Field Research</h2>
+        <p class="headline">성장 의지는 있지만, 또래 의식과 경쟁적 환경이 나만의 건강한 루틴 형성을 가로막고 있었습니다.</p>
+        <p class="lead">작은 목표에서 출발해 개인 패턴에 맞는 루틴을 발견하고, 경쟁 없이 함께 성장할 수 있는 서비스에 대한 니즈가 도출되었습니다.</p>
+      </div>
+      <div class="field-fig">
+        <div class="fi-pill">맥락적 인터뷰를 통해 얻은 인사이트</div>
+        <div class="fi-rows">
+          <div class="fi-row">
+            <div class="fi-voc"><span class="fi-tag">대학생 (22,여)</span><p>단기간 내 새로운 행동을 습관으로 정착시키기 어려움</p></div>
+            <div class="fi-conn" aria-hidden="true"></div>
+            <div class="fi-insight">단계적 진입 경험 설계</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-voc"><span class="fi-tag">대학생 (24,여)</span><p>나에게 맞는 루틴을 찾는 과정 자체가 소모적</p></div>
+            <div class="fi-conn" aria-hidden="true"></div>
+            <div class="fi-insight">행동 데이터 기반 루틴 추천</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-voc"><span class="fi-tag">중학생 (15,남)</span><p>타인의 인증 컨텐츠에 흔들리지 않는 근거 필요</p></div>
+            <div class="fi-conn" aria-hidden="true"></div>
+            <div class="fi-insight">개인화된 목표 설정 경험</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-voc"><span class="fi-tag">고등학생 (18,남)</span><p>함께하되 경쟁적이지 않은 교류 환경이 필요</p></div>
+            <div class="fi-conn" aria-hidden="true"></div>
+            <div class="fi-insight">경쟁적이지 않은 커뮤니티</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SERVICE NAMING (rocket bg) ===================== -->
+    <div class="naming" data-screen-label="Service Naming">
+      <div class="naming-bg" aria-hidden="true"></div>
+      <div class="naming-overlay" aria-hidden="true"></div>
+      <div class="naming-inner">
+        <span class="kicker">Service Naming</span>
+        <div class="naming-grid">
+          <div class="naming-col">
+            <div class="naming-big">Moonshot<br>Thinking</div>
+            <p class="naming-sub">현실의 10배를 목표로 삼는 급진적 사고방식,<br>불가능을 실현 가능한 것으로 전환하는 사고 프레임</p>
+          </div>
+          <div class="naming-arrow" aria-hidden="true">
+            <svg viewBox="0 0 170 40" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="20" x2="156" y2="20"></line>
+              <polyline points="146 11 166 20 146 29"></polyline>
+            </svg>
+          </div>
+          <div class="naming-col">
+            <div class="naming-big">Moonshot</div>
+            <p class="naming-sub">이상적 미래 자아를 아바타로 시각화하고,<br>개인 맞춤 루틴으로 습관 형성을 실현하는 서비스</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DESK RESEARCH ===================== -->
+    <section class="section desk" data-screen-label="Desk Research">
+      <h2 class="kicker">Desk Research</h2>
+      <p class="headline">정체성 확립이 선행될 때 건강한 습관 형성이 가능함을 확인했습니다.</p>
+      <p class="lead">미래 모습을 구체적으로 형상화할수록 정체성 확립에 효과적이며,<br>아바타를 통한 시각화가 자기 인식과 동기 유지에 긍정적으로 작용함을 확인했습니다.</p>
+    </section>
+    <div class="desk-diagram">
+      <div class="dd-left">
+        <div class="dd-pill">장기적 비전(정체성) 확립</div>
+        <div class="dd-card">
+          <h4>자기성취적 예언<br>(Self-fulfilling Prophecy)</h4>
+          <p>목표 방향성을 유지함으로써 현재의 자아를<br>'비전을 가진 미래의 자아'로 점진적으로<br>이끄는 심리적 기제</p>
+        </div>
+        <div class="dd-card">
+          <h4>멘탈 트레이닝<br>(Mental Training)</h4>
+          <p>목표를 심상으로 구체화하여 실제 수행에 적<br>용하는 인지 훈련 방법론</p>
+        </div>
+      </div>
+      <div class="dd-arrow" aria-hidden="true">
+        <span class="dd-arrow-label">시각화</span>
+        <svg viewBox="0 0 120 22" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="2" y1="11" x2="106" y2="11"></line>
+          <polyline points="98 4 116 11 98 18"></polyline>
+        </svg>
+      </div>
+      <div class="dd-circle">
+        <h4>'아바타'를 통해<br>사용자의 정체성 시각화</h4>
+        <p>디지털 자아인 아바타에 자신의<br>특성을 투영함으로써 자기 인식을<br>강화하고 내적 동기를 증진하는<br>긍정적 도구로 활용</p>
+      </div>
+    </div>
+
+    <!-- ===================== UI DESIGN — 아바타 만들기 ===================== -->
+    <section class="ui" data-screen-label="UI Design — 아바타 만들기">
+      <div class="section">
+        <h2 class="kicker">UI Design</h2>
+        <p class="headline">미래 모습 아바타 만들기</p>
+        <p class="lead">자신의 정체성을 정의하고 미래 모습을 아바타로 시각화합니다.<br>온보딩 완료 후, 유사한 목표를 가진 사용자들의 루틴을 기반으로 초기 맞춤 루틴을 추천합니다.</p>
+      </div>
+      <div class="figure ui-fig">
+        <img src="./assets/ms/ui-avatar.png" alt="아바타 생성 온보딩 step 1-4 화면">
+      </div>
+    </section>
+
+    <!-- ===================== UI DESIGN — 브리핑룸 ===================== -->
+    <section class="ui alt" data-screen-label="UI Design — 브리핑룸">
+      <div class="section">
+        <h2 class="kicker">UI Design</h2>
+        <p class="headline">브리핑룸</p>
+        <p class="lead">하루를 시작하기 전, 오늘의 루틴과 지난 활동을 한눈에 파악하는 홈 화면입니다.<br>매일 새로운 동기부여 문구를 제공하며, 등록된 루틴을 홈 화면 최상단에 배치하여 접근성과 직관성을 높였습니다.</p>
+      </div>
+      <div class="figure ui-fig">
+        <img src="./assets/ms/ui-briefing.png" alt="브리핑룸 홈 화면과 활동 분석">
+      </div>
+    </section>
+
+    <!-- ===================== UI DESIGN — 커뮤니티 ===================== -->
+    <section class="ui" data-screen-label="UI Design — 커뮤니티">
+      <div class="section">
+        <h2 class="kicker">UI Design</h2>
+        <p class="headline">커뮤니티</p>
+        <p class="lead">자신의 정체성과 목표를 타인과 공유하고, 서로 응원하며 긍정적 영향을 주고받는 커뮤니티 공간입니다.<br>리서치에서 확인된 '비경쟁적 협력 환경' 니즈를 반영하여, 순위나 비교 지표 없이 응원과 공동 실천 중심의 커뮤니티로 설계했습니다.</p>
+      </div>
+      <div class="figure ui-fig">
+        <img src="./assets/ms/ui-community.png" alt="커뮤니티 홈 화면과 챌린지 생성">
+      </div>
+    </section>
+
+    <!-- ===================== UI DESIGN — 루틴 관리 ===================== -->
+    <section class="ui alt" data-screen-label="UI Design — 루틴 관리">
+      <div class="section">
+        <h2 class="kicker">UI Design</h2>
+        <p class="headline">루틴 관리</p>
+        <p class="lead">이상적 미래 자아를 향한 일별 루틴을 설정하고 관리합니다.<br>목표 문구를 화면 상단에 상시 노출하여 자기 동기를 지속적으로 환기할 수 있도록 설계했습니다.</p>
+      </div>
+      <div class="figure ui-fig">
+        <img src="./assets/ms/ui-routine.png" alt="일별 루틴 리스트, 카테고리, 편집 화면">
+      </div>
+    </section>
+
+    <!-- ===================== UI DESIGN — 5분 챌린지 & 프로필 ===================== -->
+    <section class="ui" data-screen-label="UI Design — 5분 챌린지 & 프로필">
+      <div class="section">
+        <h2 class="kicker">UI Design</h2>
+        <p class="headline">5분 챌린지 &amp; 프로필</p>
+        <p class="lead">하루 5분의 간단한 챌린지로 부담 없이 작은 성공을 쌓습니다.<br>프로필에서는 루틴 실천률을 기반으로 목표 날짜와 정체성에 얼마나 다가갔는지 변화를 제시합니다.</p>
+      </div>
+      <div class="figure ui-fig">
+        <img src="./assets/ms/ui-challenge.png" alt="5분 챌린지 타이머와 프로필 화면">
+      </div>
+    </section>
+
+    <!-- ===================== USER FEEDBACK ===================== -->
+    <section class="section feedback" data-screen-label="User Feedback">
+      <h2 class="kicker">User Feedback</h2>
+      <p class="headline">사용성 테스트</p>
+      <p class="lead">Figma를 통한 간단한 프로토타이핑 완료 후, 맥락적 인터뷰를 했던 대상자에게 사용자 테스트를 진행했습니다.</p>
+      <div class="figure feedback-fig" style="width:auto;">
+        <img src="./assets/ms/feedback.png" alt="사용자 테스트 피드백">
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const wrap = document.getElementById('stage-wrap');
+  function fit() {
+    const vw = document.documentElement.clientWidth;
+    const s = Math.min(1, vw / 1920);
+    stage.style.transform = 'scale(' + s + ')';
+    wrap.style.height = (stage.offsetHeight * s) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(fit).observe(stage); }
+  fit();
+</script>
+
+</body>
+</html>

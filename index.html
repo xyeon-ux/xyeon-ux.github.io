@@ -1137,33 +1137,35 @@
 
     <!-- Header: avatar + segmented nav -->
     <header class="site-header">
-      <div class="avatar-wrap">
-        <div class="avatar" role="img" aria-label="Designer avatar" tabindex="0"></div>
-        <div class="avatar-tooltip" role="tooltip">
-          <span class="tip-label">Contact</span>
-          <span class="tip-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80f8f9e5efeeaef5f8c0e7ede1e9ecaee3efed">[email&#160;protected]</a></span>
-          <a class="tip-copy" href="/cdn-cgi/l/email-protection#2d55544842430358556d4a404c4441034e4240" aria-label="이메일 보내기">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="4" width="20" height="16" rx="3"></rect>
-              <path d="M3 6l9 7 9-7"></path>
-            </svg>
-          </a>
-          <button type="button" class="tip-copybtn" aria-label="이메일 복사">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="9" y="9" width="12" height="12" rx="2.5"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <svg class="tip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 6L9 17l-5-5"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <nav class="nav" aria-label="Primary">
-        <div class="nav-item is-active" data-tab="about" tabindex="0" role="button">ABOUT</div>
-        <div class="nav-item" data-tab="project" tabindex="0" role="button">PROJECT</div>
-      </nav>
-    </header>
+  <div class="avatar-wrap">
+    <div class="avatar" role="img" aria-label="Designer avatar" tabindex="0"></div>
+    <div class="avatar-tooltip" role="tooltip">
+      <span class="tip-label">Contact</span>
+      <span class="tip-email">
+        <a href="mailto:xyeon.ux@gmail.com">xyeon.ux@gmail.com</a>
+      </span>
+      <a class="tip-copy" href="mailto:xyeon.ux@gmail.com" aria-label="이메일 보내기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+          <path d="M3 6l9 7 9-7"></path>
+        </svg>
+      </a>
+      <button type="button" class="tip-copybtn" aria-label="이메일 복사" data-email="xyeon.ux@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="12" height="12" rx="2.5"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <svg class="tip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-item is-active" data-tab="about" tabindex="0" role="button">ABOUT</div>
+    <div class="nav-item" data-tab="project" tabindex="0" role="button">PROJECT</div>
+  </nav>
+</header>
 
     <!-- Bento grid. DOM order = mobile stack order:
          JAJAK → About → Mailring X → Moonshot → My AI Team → velog → Behance.

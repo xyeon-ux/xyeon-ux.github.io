@@ -25,19 +25,17 @@
     --lav: #ebedf7;
   }
 
-  /* ---------- Fixed-width 1920 stage, horizontal scale to viewport ---------- */
+  /* ---------- Fluid stage: max 1920, reflows down to mobile ---------- */
   #stage-wrap {
     position: relative;
     width: 100%;
     overflow: hidden;
   }
   #stage {
-    width: 1920px;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    margin-left: -960px;
-    transform-origin: top center;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
   }
 
   /* ---------- Top bar ---------- */
@@ -78,9 +76,9 @@
 
   /* ---------- Section frame ---------- */
   .section {
-    width: 1920px;
+    width: 100%;
     position: relative;
-    padding: 0 252px;
+    padding: 0 clamp(20px, 13.125%, 252px);
   }
   .kicker {
     font-weight: 800;
@@ -107,18 +105,24 @@
     letter-spacing: -0.005em;
   }
   .figure {
-    width: 1920px;
+    width: 100%;
     display: flex;
     justify-content: center;
   }
-  .figure img { display: block; height: auto; }
+  .figure img { display: block; height: auto; max-width: 100%; }
+
+  /* full-width baked-in section images (text + figure rendered together at 1920) */
+  .full-section { width: 100%; }
+  .full-section img { width: 100%; }
+  .overview-band { padding: 70px 0 40px; }
+  .gui-band { padding: 40px 0 40px; }
 
   /* ---------- Hero ---------- */
   .hero {
     padding-top: 104px;
     padding-bottom: 70px;
     display: grid;
-    grid-template-columns: 760px 1fr;
+    grid-template-columns: minmax(0,760px) 1fr;
     gap: 40px;
     align-items: center;
   }
@@ -148,7 +152,7 @@
   .meta-row dt { font-weight: 500; font-size: 26px; color: var(--muted); margin: 0; }
   .meta-row dd { margin: 0; font-weight: 700; font-size: 26px; color: var(--ink); line-height: 1.2; letter-spacing: -0.005em; }
   .hero-visual { display: flex; align-items: center; justify-content: center; }
-  .hero-visual img { width: 620px; filter: drop-shadow(0 30px 56px rgba(0,0,0,0.12)); }
+  .hero-visual img { width: min(620px, 100%); }
 
   /* ---------- Overview ---------- */
   .overview { padding-top: 70px; padding-bottom: 36px; }
@@ -156,11 +160,11 @@
   .overview .lead { color: #3b3b3b; }
   .overview .lead b { color: var(--ink); font-weight: 700; }
   .diagram-fig { margin: 56px 0 64px; }
-  .diagram-fig img { width: 1390px; }
+  .diagram-fig img { width: 72.4%; }
 
   /* 주요 기능 card */
   .feature-card {
-    margin: 0 252px 96px;
+    margin: 0 clamp(20px, 13.125%, 252px) 96px;
     background: #ffffff;
     border-radius: 20px;
     padding: 40px 56px;
@@ -192,13 +196,13 @@
   .background .headline em { color: #8aa0ff; font-style: normal; }
   .background .lead { color: #c4ccd6; }
   .bg-fig { margin-top: 4px; }
-  .bg-fig img { width: 1660px; }
+  .bg-fig img { width: 86.46%; }
 
   /* ---------- Project Goal ---------- */
   .goal { padding-top: 96px; padding-bottom: 40px; }
   .goal .lead { color: #3b3b3b; }
   .goal-fig { margin-top: 48px; padding-bottom: 70px; }
-  .goal-fig img { width: 1090px; }
+  .goal-fig img { width: 56.77%; }
 
   /* ---------- GUI Design blocks ---------- */
   .gui { padding-top: 96px; padding-bottom: 80px; }
@@ -214,7 +218,7 @@
   .ds-block .lead { color: #4a4f5c; }
 
   /* ---------- Usability Test ---------- */
-  .ut { background: #f6f7fb; padding: 100px 252px 110px; }
+  .ut { background: #f6f7fb; padding: 100px clamp(20px, 13.125%, 252px) 110px; }
   .ut-head {
     display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 56px;
   }
@@ -252,17 +256,71 @@
   .ut-bullets b { font-weight: 800; color: var(--ink); }
 
   /* ---------- Refine (full-bleed image band) ---------- */
-  .refine-band { width: 1920px; display: block; }
-  .refine-band img { display: block; width: 1920px; height: auto; }
+  .refine-band { width: 100%; display: block; }
+  .refine-band img { display: block; width: 100%; height: auto; }
 
   /* ---------- Lesson Learned ---------- */
-  .lesson { padding: 100px 252px 140px; background: #f9f9f9; }
+  .lesson { padding: 100px clamp(20px, 13.125%, 252px) 140px; background: #f9f9f9; }
   .lesson .headline { margin-bottom: 44px; white-space: pre-line; }
   .lesson-cards { display: flex; flex-direction: column; gap: 26px; }
   .lesson-card { background: #ffffff; border: 1px solid #e2e4ea; border-radius: 22px; padding: 32px 36px; }
   .lesson-card h4 { font-weight: 700; font-size: 28px; color: var(--blue-label); margin: 0 0 14px; letter-spacing: -0.005em; }
   .lesson-card p { margin: 0; font-weight: 500; font-size: 25px; line-height: 1.55; color: #2c2f30; letter-spacing: -0.005em; }
   .lesson-card b { font-weight: 700; color: var(--ink); }
+
+  /* =====================================================================
+     RESPONSIVE BREAKPOINTS
+     ===================================================================== */
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 96px; }
+    .hero-visual img { width: min(520px, 80%); }
+    .ut-head { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .ut-meta { text-align: left; white-space: normal; }
+    .feature-card { grid-template-columns: 120px 1fr; }
+  }
+
+  @media (max-width: 680px) {
+    .kicker { font-size: 22px; margin-bottom: 16px; }
+    .headline { font-size: 26px; line-height: 1.32; }
+    .lead { font-size: 18px; line-height: 1.55; }
+    .hero-title { font-size: clamp(44px, 16vw, 72px); }
+    .hero-tagline { font-size: 20px; }
+    .hero-subtitle { font-size: 20px; }
+    .role-tags span { height: 40px; font-size: 15px; padding: 0 16px; }
+    .meta-row { grid-template-columns: 92px 1fr; column-gap: 14px; }
+    .meta-row dt, .meta-row dd { font-size: 16px; }
+    .hero { padding-top: 84px; padding-bottom: 40px; }
+
+    .feature-card { grid-template-columns: 1fr; row-gap: 18px; padding: 28px 24px; }
+    .feature-card .fc-label { font-size: 21px; }
+    .feature-card li { font-size: 17px; padding-left: 22px; }
+
+    /* figures full-bleed on phones for legibility */
+    .diagram-fig img, .bg-fig img, .goal-fig img { width: 100%; }
+    .goal-fig { padding-bottom: 40px; }
+
+    .ut-tasks { grid-template-columns: 1fr; gap: 28px; }
+    .ut-pill { font-size: 19px; padding: 12px 26px; margin-bottom: 22px; }
+    .ut-card { padding: 26px 22px; }
+    .ut-scenario { font-size: 18px; margin-bottom: 22px; }
+    .ut-subtitle { font-size: 19px; }
+    .ut-metric .k { font-size: 15px; }
+    .ut-metric .v { font-size: 17px; }
+    .ut-bullets li { font-size: 16px; }
+    .ut-meta { font-size: 16px; }
+
+    .lesson .headline { font-size: 24px; margin-bottom: 28px; }
+    .lesson-card { padding: 22px 24px; }
+    .lesson-card h4 { font-size: 20px; }
+    .lesson-card p { font-size: 16px; }
+
+    .background { padding: 64px 0 60px; }
+    .goal { padding-top: 64px; }
+    .gui { padding-top: 64px; padding-bottom: 56px; }
+    .lav-block, .ds-block { padding: 64px 0 60px; }
+    .ut { padding-top: 64px; padding-bottom: 70px; }
+    .lesson { padding-top: 64px; padding-bottom: 90px; }
+  }
 </style>
 </head>
 <body>
@@ -305,33 +363,13 @@
     </section>
 
     <!-- ===================== OVERVIEW ===================== -->
-    <section class="section overview" data-screen-label="Overview">
-      <h2 class="kicker">Overview</h2>
-      <p class="headline">Mailring X : 이메일 기반 글로벌 전화 서비스</p>
-      <p class="lead">Mailring X는 개인용과 업무용으로 같은 <b>전화번호를 쓰면서 겪는 관리의 번거로움을 해결</b>하기 위해, <b>이메일 주소를 연락 수단으로 사용</b>하는 글로벌 전화 앱 서비스입니다. (주요 고객: 전화번호 용도를 분리하고 싶은 전 세계 사용자)</p>
-    </section>
-    <div class="figure diagram-fig">
-      <img src="./assets/mx/diagram-overview.png" alt="Mailring X 관계도: 개인 사용자와 그룹 사용자가 이메일 주소로 연결">
-    </div>
-    <div class="feature-card">
-      <div class="fc-label">주요 기능</div>
-      <ul>
-        <li>이메일 주소로 <b>글로벌 무료 음성 통화</b></li>
-        <li>통화 녹음, 실시간 언어 번역</li>
-        <li>그룹콜 - <b>최대 10명 동시 무료 통화</b>, 그룹콜 녹음 시 <b>AI 리포트</b> 제공</li>
-      </ul>
+    <div class="figure full-section overview-band" data-screen-label="Overview">
+      <img src="./assets/mx/section-overview.png" alt="Overview — Mailring X: 이메일 기반 글로벌 전화 서비스 관계도와 주요 기능">
     </div>
 
     <!-- ===================== BACKGROUND (dark) ===================== -->
-    <div class="background" data-screen-label="Background">
-      <div class="section">
-        <h2 class="kicker">Background</h2>
-        <p class="headline"><em>1개의 전화 번호</em>로 감당하기엔, 우리 <em>삶이 너무 다양</em>합니다.</p>
-        <p class="lead">가족, 친구, 비즈니스, 대외 활동. 이 모든 관계가 하나의 전화번호에 뒤섞입니다.<br>번호를 공유하면 개인 SNS 프로필이 노출되고, 이직 후에도 연락이 끊기지 않으며 상대에게 개인정보가 그대로 남습니다.</p>
-      </div>
-      <div class="figure bg-fig">
-        <img src="./assets/mx/bg-keypad.png" alt="단일 전화번호 사용의 불편함을 보여주는 사용자 보이스">
-      </div>
+    <div class="figure full-section" data-screen-label="Background">
+      <img src="./assets/mx/section-background.png" alt="Background — 1개의 전화 번호로 감당하기엔 우리 삶이 너무 다양합니다">
     </div>
 
     <!-- ===================== PROJECT GOAL ===================== -->
@@ -345,16 +383,9 @@
     </div>
 
     <!-- ===================== GUI DESIGN 1 ===================== -->
-    <section class="gui" data-screen-label="GUI Design — 멀티 세션">
-      <div class="section">
-        <h2 class="kicker">GUI Design</h2>
-        <p class="headline">멀티 세션으로 목적에 따라 연락 수단 분리</p>
-        <p class="lead">단일 전화번호 사용 문제를 해결하기 위해, 여러 이메일 주소를 등록하여 연락처를 관리할 수 있는 멀티 세션 기능을 제공합니다.</p>
-      </div>
-      <div class="figure gui-fig">
-        <img src="./assets/mx/gui1-multisession.png" alt="멀티 세션 워크스페이스 화면">
-      </div>
-    </section>
+    <div class="figure full-section gui-band" data-screen-label="GUI Design — 멀티 세션">
+      <img src="./assets/mx/section-gui-multisession.png" alt="GUI Design — 멀티 세션으로 목적에 따라 연락 수단 분리">
+    </div>
 
     <!-- ===================== GUI DESIGN 2 ===================== -->
     <section class="gui alt" data-screen-label="GUI Design — 전화 UX">
@@ -455,8 +486,7 @@
                 </div>
               </div>
               <ul class="ut-bullets">
-                <li>기존과 다르게 표현된 이메일 키패드를 찾는 데 시간 소요. 절반(3명)만 독립 인지에 성공</li>
-                <li><b>숫자 키패드 습관이 가장 큰 장벽.</b> 이메일 전용 키보드 자동 호출 강화 필요</li>
+                <li>"전화 = 숫자"라는 멘탈 모델이 이메일 입력의 가장 큰 진입 장벽, 전원이 첫 시도에서 숫자 키패드부터 찾는 동일한 행동 패턴을 보였고, 절반은 이메일 전용 키패드를 독립적으로 인지하지 못함. 연령, 성별과 무관하게 전원에게서 반복 관찰=개인차가 아닌 구조적 문제로 판단<br>→ 이메일 전용 키보드 자동 호출하는 개선 가설 수립</li>
               </ul>
             </div>
             <div class="ut-sub">
@@ -535,19 +565,7 @@
 </div>
 
 <script>
-  const stage = document.getElementById('stage');
-  const wrap = document.getElementById('stage-wrap');
-  function fit() {
-    const vw = document.documentElement.clientWidth;
-    const s = Math.min(1, vw / 1920);
-    stage.style.transform = 'scale(' + s + ')';
-    wrap.style.height = (stage.offsetHeight * s) + 'px';
-  }
-  window.addEventListener('resize', fit);
-  window.addEventListener('load', fit);
-  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
-  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(fit).observe(stage); }
-  fit();
+  /* Stage is now fluid (max-width 1920, reflows via CSS) — no canvas scaling. */
 </script>
 
 </body>

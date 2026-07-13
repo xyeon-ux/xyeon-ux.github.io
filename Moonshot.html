@@ -25,11 +25,10 @@
     --dark: #111010;
   }
 
-  /* ---------- Fixed-width 1920 stage ---------- */
+  /* ---------- Fluid stage: max 1920, reflows down to mobile ---------- */
   #stage-wrap { position: relative; width: 100%; overflow: hidden; }
   #stage {
-    width: 1920px; position: absolute; top: 0; left: 50%;
-    margin-left: -960px; transform-origin: top center;
+    width: 100%; max-width: 1920px; margin: 0 auto; position: relative;
   }
 
   /* ---------- Top bar ---------- */
@@ -51,7 +50,7 @@
   .back svg { width: 16px; height: 16px; }
 
   /* ---------- Section frame ---------- */
-  .section { width: 1920px; position: relative; padding: 0 252px; }
+  .section { width: 100%; position: relative; padding: 0 clamp(20px, 13.125%, 252px); }
   .kicker {
     font-weight: 800; font-size: 32px; line-height: 1; color: var(--orange);
     letter-spacing: 0.01em; margin: 0 0 24px;
@@ -61,13 +60,13 @@
     margin: 0 0 18px; letter-spacing: -0.015em;
   }
   .lead { font-weight: 500; font-size: 30px; line-height: 1.5; color: var(--muted); margin: 0; letter-spacing: -0.005em; }
-  .figure { width: 1920px; display: flex; justify-content: center; }
-  .figure img { display: block; height: auto; }
+  .figure { width: 100%; display: flex; justify-content: center; }
+  .figure img { display: block; height: auto; max-width: 100%; }
 
   /* ---------- Hero ---------- */
   .hero {
     padding-top: 104px; padding-bottom: 80px;
-    display: grid; grid-template-columns: 760px 1fr; gap: 40px; align-items: center;
+    display: grid; grid-template-columns: minmax(0,760px) 1fr; gap: 40px; align-items: center;
   }
   .hero-text { display: flex; flex-direction: column; gap: 30px; }
   .hero-headings { display: flex; flex-direction: column; gap: 14px; }
@@ -84,15 +83,15 @@
   .meta-row dt { font-weight: 500; font-size: 26px; color: var(--muted); margin: 0; }
   .meta-row dd { margin: 0; font-weight: 700; font-size: 26px; color: var(--ink); line-height: 1.2; letter-spacing: -0.005em; }
   .hero-visual { display: flex; align-items: center; justify-content: center; }
-  .hero-visual img { width: 660px; filter: drop-shadow(0 30px 56px rgba(0,0,0,0.12)); }
+  .hero-visual img { width: min(660px, 100%); }
 
   /* ---------- Overview ---------- */
   .overview { padding-top: 70px; padding-bottom: 36px; }
   .overview .headline { margin-bottom: 22px; }
   .diagram-fig { margin: 40px 0 60px; }
-  .diagram-fig img { width: 1340px; }
+  .diagram-fig img { width: 69.79%; }
   .feature-card {
-    margin: 0 252px 96px; background: #ffffff; border-radius: 20px; padding: 40px 56px;
+    margin: 0 clamp(20px, 13.125%, 252px) 96px; background: #ffffff; border-radius: 20px; padding: 40px 56px;
     display: grid; grid-template-columns: 160px 1fr 1fr; column-gap: 40px; align-items: start;
     box-shadow: 0 2px 18px rgba(0,0,0,0.03);
   }
@@ -109,8 +108,8 @@
 
   /* ---------- Field Research (dark, 2-col) ---------- */
   .field {
-    background: var(--dark); padding: 100px 252px 100px;
-    display: grid; grid-template-columns: 480px 1fr; gap: 80px; align-items: start;
+    background: var(--dark); padding: 100px clamp(20px, 13.125%, 252px) 100px;
+    display: grid; grid-template-columns: minmax(0,480px) 1fr; gap: 80px; align-items: start;
   }
   .field .kicker { color: var(--orange); }
   .field .headline { color: #ffffff; font-size: 40px; line-height: 1.45; }
@@ -193,7 +192,7 @@
 
   /* ---------- Service Naming (rocket bg) ---------- */
   .naming {
-    position: relative; width: 1920px; min-height: 1150px; overflow: hidden;
+    position: relative; width: 100%; min-height: 1150px; overflow: hidden;
     background: var(--dark);
   }
   .naming-bg {
@@ -205,7 +204,7 @@
     position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(17,16,16,0.86) 0%, rgba(17,16,16,0.52) 30%, rgba(17,16,16,0.52) 72%, rgba(17,16,16,0.92) 100%);
   }
-  .naming-inner { position: relative; z-index: 2; padding: 80px 252px 100px; }
+  .naming-inner { position: relative; z-index: 2; padding: 80px clamp(20px, 13.125%, 252px) 100px; }
   .naming .kicker { color: var(--orange); margin-bottom: 0; }
   .naming-grid {
     display: grid; grid-template-columns: 1fr 200px 1fr; align-items: center;
@@ -226,7 +225,7 @@
 
   /* Desk Research — coded identity diagram */
   .desk-diagram {
-    margin: 48px 252px 70px;
+    margin: 48px clamp(20px, 13.125%, 252px) 70px;
     background: #f3f3f3;
     border-radius: 32px;
     padding: 56px 72px 64px;
@@ -326,7 +325,81 @@
   /* ---------- User Feedback ---------- */
   .feedback { padding-top: 96px; padding-bottom: 130px; background: #fafafa; }
   .feedback-fig { margin-top: 56px; }
-  .feedback-fig img { width: 1740px; }
+  .feedback-fig img { width: 90.625%; }
+
+  /* =====================================================================
+     RESPONSIVE BREAKPOINTS
+     ===================================================================== */
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 96px; }
+    .hero-visual img { width: min(560px, 82%); }
+  }
+
+  @media (max-width: 900px) {
+    /* feature card: label on top, lists stacked */
+    .feature-card { grid-template-columns: 1fr; row-gap: 22px; }
+    /* field research: single column */
+    .field { grid-template-columns: 1fr; gap: 40px; }
+    /* fi-row: stack VOC over insight, drop the horizontal connector */
+    .fi-row { grid-template-columns: 1fr; gap: 14px; }
+    .fi-conn { display: none; }
+    /* naming: single column, arrow turns downward */
+    .naming { min-height: 0; }
+    .naming-grid { grid-template-columns: 1fr; margin-top: 220px; gap: 40px; min-height: 0; }
+    .naming-arrow svg { transform: rotate(90deg); }
+    /* desk diagram: stack cards, circle, arrow */
+    .desk-diagram { grid-template-columns: 1fr; row-gap: 28px; padding: 40px 28px 44px; }
+    .dd-arrow { flex-direction: row; }
+    .dd-arrow svg { transform: rotate(90deg); }
+    .dd-circle { width: 100%; max-width: 470px; height: auto; aspect-ratio: 1 / 1; margin: 0 auto; }
+  }
+
+  @media (max-width: 680px) {
+    .kicker { font-size: 22px; margin-bottom: 16px; }
+    .headline, .field .headline { font-size: 26px; line-height: 1.34; }
+    .lead, .field .lead { font-size: 18px; line-height: 1.55; }
+    .hero-title { font-size: clamp(46px, 16vw, 78px); }
+    .hero-tagline { font-size: 20px; }
+    .role-tags span { height: 40px; font-size: 15px; padding: 0 16px; }
+    .meta-row { grid-template-columns: 92px 1fr; column-gap: 14px; }
+    .meta-row dt, .meta-row dd { font-size: 16px; }
+    .hero { padding-top: 84px; padding-bottom: 48px; }
+
+    .feature-card { padding: 28px 24px; }
+    .feature-card .fc-label { font-size: 21px; }
+    .feature-card li { font-size: 17px; padding-left: 22px; }
+
+    .diagram-fig img, .feedback-fig img { width: 100%; }
+
+    /* field research coded cluster */
+    .fi-pill { font-size: 18px; padding: 11px 22px; margin-bottom: 18px; }
+    .fi-tag { font-size: 16px; }
+    .fi-voc p { font-size: 18px; }
+    .fi-insight { font-size: 18px; padding: 20px 18px; }
+
+    /* naming */
+    .naming-grid { margin-top: 180px; }
+    .naming-big { font-size: 40px; }
+    .naming-sub { font-size: 18px; }
+    .naming-arrow svg { width: 120px; }
+
+    /* desk diagram */
+    .dd-pill { font-size: 20px; padding: 12px 24px; }
+    .dd-card { padding: 24px 26px 28px; }
+    .dd-card h4 { font-size: 22px; }
+    .dd-card p { font-size: 17px; }
+    .dd-arrow .dd-arrow-label { font-size: 20px; }
+    .dd-circle h4 { font-size: 22px; }
+    .dd-circle p { font-size: 17px; }
+    .dd-circle { padding: 0 32px; }
+
+    /* vertical rhythm trim */
+    .field { padding-top: 64px; padding-bottom: 64px; }
+    .desk { padding-top: 64px; }
+    .ui { padding-top: 64px; padding-bottom: 56px; }
+    .feedback { padding-top: 64px; padding-bottom: 90px; }
+    .naming-inner { padding-top: 56px; padding-bottom: 64px; }
+  }
 </style>
 </head>
 <body>
@@ -363,7 +436,7 @@
         </dl>
       </div>
       <div class="hero-visual">
-        <img src="./assets/ms/hero-phones.png" alt="Moonshot 앱 홈 화면과 커뮤니티 화면 목업">
+        <img src="./assets/ms/hero-phones-new.png" alt="Moonshot 앱 홈 화면과 커뮤니티 화면 목업">
       </div>
     </section>
 
@@ -552,19 +625,7 @@
 </div>
 
 <script>
-  const stage = document.getElementById('stage');
-  const wrap = document.getElementById('stage-wrap');
-  function fit() {
-    const vw = document.documentElement.clientWidth;
-    const s = Math.min(1, vw / 1920);
-    stage.style.transform = 'scale(' + s + ')';
-    wrap.style.height = (stage.offsetHeight * s) + 'px';
-  }
-  window.addEventListener('resize', fit);
-  window.addEventListener('load', fit);
-  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
-  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(fit).observe(stage); }
-  fit();
+  /* Stage is now fluid (max-width 1920, reflows via CSS) — no canvas scaling. */
 </script>
 
 </body>

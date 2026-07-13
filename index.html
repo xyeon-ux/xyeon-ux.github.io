@@ -3,60 +3,70 @@
 <head>
 <meta charset="utf-8">
 <title>Product Designer 정시연</title>
-<link rel="icon" type="image/png" href="assets/xy-emoji.png">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,700&display=swap" rel="stylesheet">
+
 <meta property="og:title" content="Product Designer 정시연">
 <meta property="og:description" content="안녕하세요, Product Designer 정시연입니다.">
 <meta property="og:image" content="https://xyeon-ux.com/assets/og-xyux.png">
 <meta property="og:url" content="https://xyeon-ux.com">
- <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2DBKQPZGTR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-2DBKQPZGTR');
-</script>
+ <!-- Google tag (gtag.js) -->
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DBKQPZGTR"></script>
+ <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+ 
+   gtag('config', 'G-2DBKQPZGTR');
+ </script>
+ 
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background: #f9f9f9;
     font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
     color: #17191a;
-    overflow: hidden;
   }
-  /* Stage scales the fixed 1920×1080 canvas to any viewport */
+  /* Fluid, scrolling page. The stage is now a responsive content column
+     that reflows instead of a fixed 1920×1080 canvas scaled to fit. */
   #viewport {
-    position: fixed;
-    inset: 0;
+    position: relative;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     background: #f9f9f9;
+    padding: clamp(20px, 3vw, 44px) clamp(16px, 3vw, 40px) clamp(40px, 5vw, 72px);
   }
   #stage {
     position: relative;
-    width: 1920px;
-    height: 1080px;
-    background: #f9f9f9;
-    overflow: hidden;
-    transform-origin: center center;
-    flex-shrink: 0;
+    width: 100%;
+    max-width: 1340px;
+    margin: 0 auto;
+    background: transparent;
   }
 
-  /* ---------- Top nav ---------- */
+  /* ---------- Top header: avatar + segmented nav, centered ---------- */
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 1.6vw, 22px);
+    margin: 0 auto clamp(20px, 3vw, 40px);
+    flex-wrap: wrap;
+  }
   .avatar-wrap {
-    position: absolute;
-    left: 670px; top: 48px;
-    width: 92px; height: 92px;
+    position: relative;
+    width: clamp(64px, 7vw, 92px);
+    height: clamp(64px, 7vw, 92px);
+    flex-shrink: 0;
     z-index: 30;
   }
   .avatar {
@@ -134,16 +144,39 @@
     background: #d97757;
     color: #ffffff;
   }
+  .tip-copybtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -8px;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.06);
+    border: none;
+    color: #17191a;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+    padding: 0;
+  }
+  .tip-copybtn:hover { background: rgba(0,0,0,0.10); }
+  .tip-copybtn:active { background: rgba(0,0,0,0.14); }
+  .tip-copybtn svg { width: 18px; height: 18px; }
+  .tip-copybtn .tip-check { display: none; }
+  .tip-copybtn.copied {
+    background: #d97757;
+    color: #ffffff;
+  }
+  .tip-copybtn.copied svg:not(.tip-check) { display: none; }
+  .tip-copybtn.copied .tip-check { display: block; }
   .tip-copy svg {
     width: 18px; height: 18px;
     display: block;
   }
   .nav {
-    position: absolute;
-    left: 787px; top: 52px;
-    height: 84px;
+    position: relative;
+    height: clamp(60px, 6vw, 84px);
     background: #ffffff;
-    border-radius: 26px;
+    border-radius: clamp(18px, 2vw, 26px);
     display: inline-flex;
     align-items: center;
     padding: 0 13px;
@@ -151,8 +184,8 @@
     width: max-content;
   }
   .nav-item {
-    height: 58px;
-    padding: 0 28px;
+    height: clamp(42px, 4.2vw, 58px);
+    padding: 0 clamp(18px, 2.4vw, 28px);
     border-radius: 16px;
     background: transparent;
     display: inline-flex;
@@ -160,7 +193,7 @@
     justify-content: center;
     font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
     font-weight: 700;
-    font-size: 25.4px;
+    font-size: clamp(17px, 2vw, 25.4px);
     line-height: 1;
     color: #8c8c8c;
     cursor: pointer;
@@ -173,12 +206,37 @@
     color: #000;
   }
 
+  /* ===================================================================
+     Bento grid — responsive. Desktop: 4-col masonry via grid areas.
+     Tablet: 2-col. Mobile: single-column stack (DOM source order).
+     =================================================================== */
+  /* Figma 0-main-0713: 4-col × 3-row bento.
+     JAJAK 2×2 top-left · About me top-right(2col) · iPhones · Moonshot
+     tall right column · bottom row: Behance / My AI Team / velog. */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows:
+      clamp(180px, 19.5vw, 266px)
+      clamp(180px, 19.5vw, 266px)
+      clamp(180px, 19.5vw, 266px);
+    grid-template-areas:
+      "jajak   jajak about   about"
+      "jajak   jajak iphones moon"
+      "behance myai  velog   moon";
+    gap: clamp(12px, 1.5vw, 24px);
+    width: 100%;
+  }
+
   /* ---------- Bento card base ---------- */
   .card {
-    position: absolute;
-    border-radius: 28px;
+    position: relative;
+    border-radius: clamp(20px, 2vw, 28px);
     overflow: hidden;
     cursor: pointer;
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
     transition: transform .35s cubic-bezier(.2,.7,.2,1.05),
                 box-shadow .35s ease,
                 opacity .4s ease;
@@ -190,29 +248,113 @@
   }
   .card:active { transform: translateY(-2px) scale(.997); }
 
+  /* External-link cards: quieter hover, no big lift */
+  .card-velog:hover,
+  .card-behance:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 26px -14px rgba(0,0,0,0.16);
+  }
+  /* Veiled cards keep their hover interactions inside the veil */
+  .card:hover .emoji-track { animation-play-state: paused; }
+
+  /* ---------- Hover veil (Figma 0-main-0713-hover) ----------
+     Dark blurred overlay with title / period / CTA, per card. */
+  .veil {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 1.4vw, 20px);
+    padding: clamp(16px, 2vw, 32px);
+    text-align: center;
+    background: rgba(0,0,0,0.64);
+    -webkit-backdrop-filter: blur(13.8px);
+    backdrop-filter: blur(13.8px);
+    color: #ffffff;
+    opacity: 0;
+    transition: opacity .3s ease;
+    pointer-events: none;
+  }
+  .card:hover .veil,
+  .card:focus-visible .veil {
+    opacity: 1;
+  }
+  .veil-title {
+    font-weight: 600;
+    line-height: 1.35;
+    font-size: clamp(16px, 1.35vw, 26px);
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+  .veil-period {
+    font-weight: 400;
+    font-size: clamp(13px, 0.95vw, 18px);
+    color: rgba(255,255,255,0.92);
+  }
+  .veil-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: clamp(4px, 0.6vw, 10px);
+    padding: clamp(8px, 0.8vw, 12px) clamp(18px, 1.5vw, 28px);
+    border-radius: 999px;
+    background: #ffffff;
+    color: #17191a;
+    font-weight: 600;
+    font-size: clamp(13px, 1vw, 18px);
+    white-space: nowrap;
+    transform: translateY(6px);
+    transition: transform .3s cubic-bezier(.2,.7,.2,1.05);
+  }
+  .card:hover .veil-cta,
+  .card:focus-visible .veil-cta { transform: translateY(0); }
+  .veil-cta .arr { font-weight: 600; }
+  /* Hero card gets larger type */
+  .card-jajak .veil-title { font-size: clamp(20px, 2.1vw, 40px); }
+  .card-jajak .veil-period { font-size: clamp(14px, 1.3vw, 25px); }
+  .card-jajak .veil { gap: clamp(14px, 2.4vw, 34px); }
+  .card-jajak .veil-cta { font-size: clamp(14px, 1.4vw, 26px); padding: clamp(10px, 1vw, 14px) clamp(20px, 1.8vw, 32px); }
+  .card-ux .veil-title { font-size: clamp(16px, 1.55vw, 30px); }
+  @media (prefers-reduced-motion: reduce) {
+    .veil, .veil-cta { transition: none; }
+  }
+
+  .card-velog    { grid-area: velog; }
+  .card-behance  { grid-area: behance; }
+  .card-ux       { grid-area: about; }
+  .card-iphones  { grid-area: iphones; }
+  .card-jajak    { grid-area: jajak; }
+  .card-frenemies{ grid-area: myai; }
+  .card-moonshot { grid-area: moon; }
+
   /* ---------- velog card ---------- */
   .card-velog {
-    left: 271px; top: 179px;
-    width: 259px; height: 269px;
-    background: #d1d1d1;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .card-velog .logo {
-    position: absolute;
-    left: 36px; top: 104px;
-    width: 187px; height: 61px;
+    position: relative;
+    width: clamp(140px, 70%, 223px);
+    height: auto;
   }
-  .card-velog .logo img { width: 100%; height: 100%; display: block; }
+  .card-velog .logo img { width: 100%; height: auto; display: block; }
 
   /* ---------- Behance card ---------- */
   .card-behance {
-    left: 271px; top: 472px;
-    width: 259px; height: 270px;
-    background: #e9e9e9;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .card-behance .logo {
-    position: absolute;
-    left: 52px; top: 85px;
+    position: relative;
     width: 159px; height: 99px;
+    transform: scale(clamp(0.62, 0.5vw + 0.5, 1));
   }
   .card-behance .logo img.a {
     position: absolute; left: 0; top: 0;
@@ -223,49 +365,51 @@
     width: 69.208px; height: 92.299px;
   }
 
-  /* ---------- About me card ---------- */
+  /* ---------- UX is cute card ---------- */
   .card-ux {
-    left: 554px; top: 179px;
-    width: 783px; height: 269px;
     background: #ffffff;
+    display: flex;
+    flex-direction: column;
   }
   .card-ux .title {
-    position: absolute;
-    left: 44px; top: 25px;
+    position: relative;
+    padding: clamp(18px, 2.4vw, 25px) clamp(22px, 3vw, 44px) 0;
     font-weight: 700;
-    font-size: 72px;
+    font-size: clamp(36px, 5.2vw, 72px);
     line-height: 1;
     color: #17191a;
     letter-spacing: -0.02em;
   }
   .card-ux .emoji-row {
-    position: absolute;
-    left: 0; top: 121px;
+    position: relative;
+    margin-top: auto;
     width: 100%;
-    height: 120px;
+    height: clamp(78px, 11vw, 120px);
     overflow: hidden;
   }
   .card-ux .emoji-track {
     position: absolute;
-    left: 35px; top: 0;
-    height: 120px;
+    left: clamp(18px, 2.4vw, 35px); top: 0;
+    height: 100%;
     white-space: nowrap;
     animation: ux-scroll 22s linear infinite;
     will-change: transform;
   }
   .card-ux .emoji-track .em {
     display: inline-block;
-    width: 120px;
-    height: 120px;
-    margin-right: 32px;
-    line-height: 120px;
+    width: clamp(78px, 11vw, 120px);
+    height: clamp(78px, 11vw, 120px);
+    margin-right: clamp(20px, 2.6vw, 32px);
+    line-height: clamp(78px, 11vw, 120px);
     text-align: center;
-    font-size: 96px;
+    font-size: clamp(62px, 8.8vw, 96px);
     vertical-align: middle;
   }
+  /* translateX(-50%) loops by exactly one of the two identical emoji sets,
+     so the scroll stays seamless at any emoji size. */
   @keyframes ux-scroll {
     from { transform: translateX(0); }
-    to   { transform: translateX(-760px); }
+    to   { transform: translateX(-50%); }
   }
   .card-ux:hover .emoji-track {
     animation-play-state: paused;
@@ -274,13 +418,11 @@
     .card-ux .emoji-track { animation: none; }
   }
 
-  /* ---------- Mailring X card ---------- */
+  /* ---------- iPhones card (Mailring X) ---------- */
   .card-iphones {
-    left: 554px; top: 472px;
-    width: 379.5px; height: 270px;
-    background: #eaeaea;
+    background: #e6e6e6;
   }
-  .card-iphones img {
+  .card-iphones img.mock {
     position: absolute;
     left: 50%; top: 50%;
     width: 100%; height: 100%;
@@ -289,138 +431,94 @@
     object-position: center;
     display: block;
   }
-
-  /* ---------- JAJAK card ---------- */
+  /* ---------- JAJAK hero card ---------- */
+  /* Figma: gray card, white JAJAK wordmark centered top, macbook centered. */
   .card-jajak {
-    left: 957.5px; top: 472px;
-    width: 379.5px; height: 511px;
-    background: #eaeaea;
+    background: #e6e6e6;
   }
   .card-jajak .wordmark {
     position: absolute;
-    left: 63.5px; top: 49px;
-    width: 253.1px;
-    height: 60.617px;
+    left: 50%;
+    top: 9.4%;
+    transform: translateX(-50%);
+    width: 42%;
+    max-width: 280px;
+    z-index: 2;
   }
   .card-jajak .wordmark img {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
   }
-  .card-jajak .macbook {
+  .card-jajak .hero-mock {
     position: absolute;
-    left: 50%; top: 140px;
-    width: 342px; height: 355px;
+    left: 50%;
+    top: 30.7%;
     transform: translateX(-50%);
+    width: 84.8%;
+    height: 62%;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+    transition: transform .45s cubic-bezier(.2,.7,.2,1.05);
   }
-  .card-jajak .macbook img {
+  .card-jajak:hover .hero-mock { transform: translateX(-50%) translateY(-8px); }
+  .card-jajak .hero-mock img {
     display: block;
-    width: 100%;
+    width: auto;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
   }
 
-  /* ---------- AI teammates card ---------- */
+  /* ---------- My AI Team card ---------- */
   .card-frenemies {
-    left: 271px; top: 766px;
-    width: 662px; height: 217px;
     background: #ffffff;
-  }
-  .card-frenemies .text {
-    position: absolute;
-    left: 25px; top: 0; bottom: 0;
-    width: 612px;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    font-weight: 700;
-    font-size: 68px;
-    line-height: 1.08;
-    color: #17191a;
-    letter-spacing: -0.02em;
-    z-index: 2;
+    justify-content: center;
+    gap: clamp(10px, 1.2vw, 16px);
+    padding: 12px clamp(16px, 1.8vw, 24px);
   }
   .card-frenemies .sparkle {
-    position: absolute;
-    left: 526.898px; top: 26.488px;
-    width: 102.292px; height: 106.972px;
-    z-index: 1;
+    position: relative;
+    width: clamp(42px, 5.3vw, 72px);
+    flex-shrink: 0;
   }
-  .card-frenemies .sparkle img { width: 100%; height: 100%; display: block; }
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+  .card-frenemies .sparkle img { width: 100%; height: auto; display: block; }
+  .card-frenemies .text {
+    position: relative;
+    min-width: 0;
+    font-weight: 700;
+    font-size: clamp(24px, 2.9vw, 56px);
+    line-height: 1.2;
+    color: #17191a;
+    letter-spacing: -0.02em;
   }
 
   /* ---------- Moonshot card ---------- */
   .card-moonshot {
-    left: 1361px; top: 179px;
-    width: 259px; height: 496px;
-    background: #eaeaea;
+    background: #e6e6e6;
   }
   .card-moonshot .bg {
     position: absolute;
     inset: 0;
-    background: url(./assets/rocket.png) center / cover no-repeat;
+    background: url(./assets/rocket.png) 37% center / cover no-repeat;
   }
   .card-moonshot .word {
     position: absolute;
-    left: 24px; top: 218px;
-    width: 211px;
+    left: 8%; right: 8%;
+    top: 38.7%;
     text-align: center;
     font-family: "Montserrat", sans-serif;
     font-style: italic;
     font-weight: 700;
-    font-size: 40px;
+    font-size: clamp(28px, 3.4vw, 40px);
     line-height: 1.245;
     color: #ffffff;
     text-shadow: 0 4px 4px rgba(0,0,0,0.25);
-  }
-
-  /* ---------- Coming-soon spinner card ---------- */
-  .card-soon {
-    left: 1361px; top: 699px;
-    width: 259px; height: 284px;
-    background: #ffffff;
-    border: 3px dashed #d6d6d6;
-  }
-  .card-soon .spinner {
-    position: absolute;
-    left: 50%; top: 50%;
-    width: 121px; height: 121px;
-    transform: translate(-50%, -50%);
-  }
-  .card-soon .spinner span {
-    position: absolute;
-    left: 50%; top: 0;
-    width: 9px; height: 28px;
-    margin-left: -4.5px;
-    border-radius: 4.5px;
-    background: #a3a3a3;
-    transform-origin: 50% 60.5px;
-  }
-  .card-soon .soon-overlay {
-    position: absolute;
-    inset: -3px;
-    border-radius: 28px;
-    background: rgba(17,19,20,0.82);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 26px;
-    text-align: center;
-    color: #ffffff;
-    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
-    opacity: 0;
-    transition: opacity .25s ease;
-    pointer-events: none;
-  }
-  .card-soon:hover .soon-overlay,
-  .card-soon:focus-visible .soon-overlay {
-    opacity: 1;
   }
 
   /* ---------- Toast (copy confirmation) ---------- */
@@ -461,6 +559,53 @@
   .card:focus-visible {
     outline: 3px solid #17191a;
     outline-offset: 4px;
+  }
+
+  /* ===================================================================
+     RESPONSIVE BREAKPOINTS for the bento
+     =================================================================== */
+
+  /* Tablet — 2 columns, hero first and full-width */
+  @media (max-width: 1024px) {
+    .bento {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows:
+        clamp(280px, 46vw, 400px)
+        clamp(150px, 26vw, 220px)
+        clamp(170px, 28vw, 240px)
+        clamp(170px, 28vw, 240px)
+        clamp(150px, 26vw, 210px);
+      grid-template-areas:
+        "jajak    jajak"
+        "about    about"
+        "iphones  moon"
+        "myai     moon"
+        "behance  velog";
+    }
+  }
+
+  /* Mobile — single-column stack, follows DOM source order
+     (jajak → about → iphones → moonshot → myai → velog → behance) */
+  @media (max-width: 640px) {
+    .bento {
+      display: flex;
+      flex-direction: column;
+      grid-template-areas: none;
+      gap: 14px;
+    }
+    .card { grid-area: auto; }
+    .card-ux        { min-height: 208px; }
+    .card-jajak     { min-height: clamp(300px, 84vw, 420px); }
+    .card-iphones   { min-height: clamp(240px, 72vw, 330px); }
+    .card-moonshot  { min-height: clamp(300px, 92vw, 420px); }
+    .card-velog,
+    .card-behance   { min-height: 148px; }
+    .card-frenemies { min-height: 152px; }
+  }
+
+  /* Very small phones */
+  @media (max-width: 380px) {
+    .site-header { gap: 10px; }
   }
 
   /* ===================================================================
@@ -890,6 +1035,17 @@
   }
   .ait-chat { display: flex; flex-direction: column; gap: 34px; }
   .ait-msg { display: flex; gap: 16px; align-items: flex-end; max-width: 100%; }
+  /* scroll-reveal: each message rises + fades in as it enters the modal viewport */
+  .ait-chat .ait-msg {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .55s cubic-bezier(.22,.61,.36,1), transform .55s cubic-bezier(.22,.61,.36,1);
+    will-change: opacity, transform;
+  }
+  .ait-chat .ait-msg.is-revealed { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .ait-chat .ait-msg { opacity: 1; transform: none; transition: none; }
+  }
   .ait-msg.ai { justify-content: flex-start; }
   .ait-msg.user { flex-direction: row-reverse; }
   .ait-ava { width: 64px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -955,108 +1111,143 @@
     opacity: 0.55;
   }
 </style>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#d6eef1"></rect><g><rect x="30" y="34" width="26" height="32" rx="5" fill="#0f96a4"></rect><rect x="59" y="34" width="11" height="15" rx="3" fill="#2c5257"></rect><rect x="59" y="52" width="11" height="14" rx="3" fill="#8fccd4"></rect></g></svg>
+</template>
 </head>
 <body>
 
 <div id="viewport">
   <div id="stage" data-screen-label="00 Main">
 
-    <!-- Top nav -->
-    <div class="avatar-wrap">
-      <div class="avatar" role="img" aria-label="Designer avatar" tabindex="0"></div>
-      <div class="avatar-tooltip" role="tooltip">
-        <span class="tip-label">Contact</span>
-        <span class="tip-email">xyeon.ux@gmail.com</span>
-        <button class="tip-copy" type="button" aria-label="이메일 주소 복사">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <nav class="nav" aria-label="Primary">
-      <div class="nav-item is-active" data-tab="about" tabindex="0" role="button">ABOUT</div>
-      <div class="nav-item" data-tab="project" tabindex="0" role="button">PROJECT</div>
-    </nav>
-
-    <!-- velog -->
-    <a class="card card-velog about-card" href="https://velog.io/@xyux99/posts" target="_blank" rel="noopener" aria-label="velog 글 모음 열기">
-      <div class="logo"><img src="./assets/velog.svg" alt="velog"></div>
-    </a>
-
-    <!-- Behance -->
-    <a class="card card-behance about-card" href="https://www.behance.net/xyeon-ux" target="_blank" rel="noopener" aria-label="Behance 프로필 열기">
-      <div class="logo">
-        <img class="a" src="./assets/behance-1.svg" alt="">
-        <img class="b" src="./assets/behance-2.svg" alt="">
-      </div>
-    </a>
-
-    <!-- UX is cute -->
-    <a class="card card-ux about-card" href="#ux" aria-label="About me 열기">
-      <div class="title">About me</div>
-      <div class="emoji-row" aria-hidden="true">
-        <div class="emoji-track">
-          <span class="em">🍔</span>
-          <span class="em">🍞</span>
-          <span class="em">🪗</span>
-          <span class="em">👻</span>
-          <span class="em">🥙</span>
-          <span class="em">🍔</span>
-          <span class="em">🍞</span>
-          <span class="em">🪗</span>
-          <span class="em">👻</span>
-          <span class="em">🥙</span>
+    <!-- Header: avatar + segmented nav -->
+    <header class="site-header">
+      <div class="avatar-wrap">
+        <div class="avatar" role="img" aria-label="Designer avatar" tabindex="0"></div>
+        <div class="avatar-tooltip" role="tooltip">
+          <span class="tip-label">Contact</span>
+          <span class="tip-email">xyeon.ux@gmail.com</span>
+          <a class="tip-copy" href="mailto:xyeon.ux@gmail.com" aria-label="이메일 보내기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+              <path d="M3 6l9 7 9-7"></path>
+            </svg>
+          </a>
+          <button type="button" class="tip-copybtn" aria-label="이메일 복사">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="12" height="12" rx="2.5"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <svg class="tip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+          </button>
         </div>
       </div>
-    </a>
+      <nav class="nav" aria-label="Primary">
+        <div class="nav-item is-active" data-tab="about" tabindex="0" role="button">ABOUT</div>
+        <div class="nav-item" data-tab="project" tabindex="0" role="button">PROJECT</div>
+      </nav>
+    </header>
 
-    <!-- iPhones — Mailring X case study -->
-    <a class="card card-iphones" href="./MailringX.html" aria-label="Mailring X 케이스 스터디 열기">
-      <img src="./assets/iphones.png" alt="Mailring X 전화 수신 화면 목업">
-    </a>
+    <!-- Bento grid. DOM order = mobile stack order:
+         JAJAK → About → Mailring X → Moonshot → My AI Team → velog → Behance.
+         Desktop & tablet placement is controlled by grid-template-areas. -->
+    <div class="bento">
 
-    <!-- JAJAK macbook -->
-    <a class="card card-jajak" href="./JAJAK.html" aria-label="JAJAK 케이스 스터디 열기">
-      <div class="wordmark"><img src="./assets/jajak-logo.svg" alt="JAJAK"></div>
-      <div class="macbook">
-        <img src="./assets/macbook-jajak.png" alt="JAJAK 서비스 맥북 목업">
-      </div>
-    </a>
+      <!-- JAJAK — featured hero -->
+      <a class="card card-jajak" href="./JAJAK.html" aria-label="JAJAK 케이스 스터디 열기">
+        <div class="wordmark"><img src="./assets/jajak-logo.svg" alt="JAJAK"></div>
+        <div class="hero-mock">
+          <img src="./uploads/mockup-jajak.png" alt="JAJAK 서비스 맥북 목업">
+        </div>
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">AI 글쓰기 교육 플랫폼<br>’자작자작’ UX/UI 개선</div>
+          <div class="veil-period">2025.03 ~ 2025.08 (6개월)</div>
+          <span class="veil-cta">자세히 보기 <span class="arr">→</span></span>
+        </div>
+      </a>
 
-    <!-- Frenemies -->
-    <a class="card card-frenemies about-card" href="#frenemies" aria-label="Meet my AI teammates 케이스 스터디 열기">
-      <div class="text">Meet my AI teammates..</div>
-      <div class="sparkle" aria-hidden="true">
-        <img src="./assets/sparkle.svg" alt="">
-      </div>
-    </a>
+      <!-- About me (프로필) -->
+      <a class="card card-ux about-card" href="#ux" aria-label="About me 열기">
+        <div class="title">About me</div>
+        <div class="emoji-row" aria-hidden="true">
+          <div class="emoji-track">
+            <span class="em">🍔</span>
+            <span class="em">🍞</span>
+            <span class="em">🪗</span>
+            <span class="em">👻</span>
+            <span class="em">🥙</span>
+            <span class="em">🎠</span>
+            <span class="em">🍔</span>
+            <span class="em">🍞</span>
+            <span class="em">🪗</span>
+            <span class="em">👻</span>
+            <span class="em">🥙</span>
+            <span class="em">🎠</span>
+          </div>
+        </div>
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">Product Designer 정시연을 소개합니다.</div>
+          <span class="veil-cta">정시연 보기 <span class="arr">→</span></span>
+        </div>
+      </a>
 
-    <!-- Moonshot -->
-    <a class="card card-moonshot" href="./Moonshot.html" aria-label="Moonshot 케이스 스터디 열기">
-      <div class="bg"></div>
-      <div class="word">Moonshot</div>
-    </a>
+      <!-- iPhones — Mailring X case study -->
+      <a class="card card-iphones" href="./MailringX.html" aria-label="Mailring X 케이스 스터디 열기">
+        <img class="mock" src="./assets/iphones.png" alt="Mailring X 전화 수신 화면 목업">
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">이메일 기반 글로벌 전화 서비스<br>`Mailring X` 런칭</div>
+          <div class="veil-period">2023.11 ~ 2024.12 (1년 2개월)</div>
+          <span class="veil-cta">자세히 보기 <span class="arr">→</span></span>
+        </div>
+      </a>
 
-    <!-- Coming soon -->
-    <a class="card card-soon about-card" href="#soon" aria-label="작업중인 프로젝트">
-      <div class="spinner" aria-hidden="true">
-        <span style="transform:rotate(0deg);opacity:1"></span>
-        <span style="transform:rotate(30deg);opacity:.92"></span>
-        <span style="transform:rotate(60deg);opacity:.83"></span>
-        <span style="transform:rotate(90deg);opacity:.75"></span>
-        <span style="transform:rotate(120deg);opacity:.67"></span>
-        <span style="transform:rotate(150deg);opacity:.58"></span>
-        <span style="transform:rotate(180deg);opacity:.5"></span>
-        <span style="transform:rotate(210deg);opacity:.42"></span>
-        <span style="transform:rotate(240deg);opacity:.33"></span>
-        <span style="transform:rotate(270deg);opacity:.25"></span>
-        <span style="transform:rotate(300deg);opacity:.17"></span>
-        <span style="transform:rotate(330deg);opacity:.08"></span>
-      </div>
-      <div class="soon-overlay">New project in progress…</div>
-    </a>
+      <!-- Moonshot -->
+      <a class="card card-moonshot" href="./Moonshot.html" aria-label="Moonshot 케이스 스터디 열기">
+        <div class="bg"></div>
+        <div class="word">Moonshot</div>
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">미래 모습 아바타를 통한<br>바른 생활 습관 형성 서비스<br>‘Moonshot’</div>
+          <div class="veil-period">2022.03 ~ 2022.09 (7개월)</div>
+          <span class="veil-cta">자세히 보기 <span class="arr">→</span></span>
+        </div>
+      </a>
+
+      <!-- My AI Team -->
+      <a class="card card-frenemies about-card" href="#frenemies" aria-label="My AI Team 케이스 스터디 열기">
+        <div class="sparkle" aria-hidden="true">
+          <img src="./assets/sparkle.svg" alt="">
+        </div>
+        <div class="text">My AI Team..</div>
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">저의 AI 팀원을 소개합니다.</div>
+          <span class="veil-cta">자세히 보기 <span class="arr">→</span></span>
+        </div>
+      </a>
+
+      <!-- velog -->
+      <a class="card card-velog about-card" href="https://velog.io/@xyux99/posts" target="_blank" rel="noopener" aria-label="velog 글 모음 열기">
+        <div class="logo"><img src="./assets/velog-dark.svg" alt="velog"></div>
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">독후감, 학습, 회고 기록</div>
+          <span class="veil-cta">웹사이트 이동 <span class="arr">→</span></span>
+        </div>
+      </a>
+
+      <!-- Behance -->
+      <a class="card card-behance about-card" href="https://www.behance.net/xyeon-ux" target="_blank" rel="noopener" aria-label="Behance 프로필 열기">
+        <div class="logo">
+          <img class="a" src="./assets/behance-1.svg" alt="">
+          <img class="b" src="./assets/behance-2.svg" alt="">
+        </div>
+        <div class="veil" aria-hidden="true">
+          <div class="veil-title">대학생<br>UX/UI 프로젝트</div>
+          <span class="veil-cta">웹사이트 이동 <span class="arr">→</span></span>
+        </div>
+      </a>
+
+    </div>
 
   </div>
 </div>
@@ -1098,6 +1289,7 @@
         <section class="am-section" id="am-intro">
           <h3 class="am-sec-title">Introduce</h3>
           <div class="am-card">
+            <p class="am-intro-lead">UX는 귀엽다.</p>
             <p class="am-intro-text">UX 디자인을 접했을 때 '케밥 메뉴', '햄버거 메뉴', '와플 메뉴'처럼 <strong>음식 이름을 표준 용어로 사용하는 점</strong>이 논리와 엄밀함을 요구하는 분야에서 귀엽다고 생각했습니다.</p>
             <p class="am-intro-text">그리고 이 귀여운 이름들이 UX의 본질, 즉 <strong>복잡한 것을 누구나 쉽고 직관적으로 전달하려는 태도</strong>를 그대로 담고 있다는 것을 깨달았습니다. 엄밀함을 추구하면서도 사람을 먼저 생각하는 그 점에 이끌려 UX 디자인을 시작하게 되었고, 이처럼 간단 명료하고 위트 있는 디자인을 지향합니다.</p>
           </div>
@@ -1527,15 +1719,8 @@
 </div>
 
 <script>
-  // Letterbox-scale the 1920×1080 stage to fit any viewport
+  // The bento now reflows responsively via CSS Grid — no canvas scaling needed.
   const stage = document.getElementById('stage');
-  function fit() {
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const s = Math.min(vw / 1920, vh / 1080);
-    stage.style.transform = 'scale(' + s + ')';
-  }
-  window.addEventListener('resize', fit);
-  fit();
 
   // Make every card behave like a link; click logs to console as a stand-in
   // for routing into a detail page (the user mentioned each block opens a
@@ -1628,6 +1813,7 @@
     aiOverlay.hidden = false;
     requestAnimationFrame(() => aiOverlay.classList.add('is-open'));
     aiModal.scrollTop = 0;
+    resetChatReveal();
     document.body.style.overflow = 'hidden';
     aiClose.focus();
   }
@@ -1640,6 +1826,27 @@
 
   aiCard.addEventListener('click', openAI);
   aiClose.addEventListener('click', closeAI);
+
+  /* Workflow chat: reveal each message one-by-one as it scrolls into the modal.
+     Scroll-driven (robust against transforms/paint timing) — when a message's
+     top crosses ~86% of the modal viewport, it rises + fades in. */
+  const aiChatMsgs = Array.from(aiModal.querySelectorAll('.ait-chat .ait-msg'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function updateChatReveal() {
+    if (reduceMotion) { aiChatMsgs.forEach(m => m.classList.add('is-revealed')); return; }
+    const trigger = aiModal.clientHeight * 0.86;
+    const base = aiModal.getBoundingClientRect().top;
+    aiChatMsgs.forEach(m => {
+      if (m.classList.contains('is-revealed')) return;
+      const top = m.getBoundingClientRect().top - base;
+      if (top < trigger) m.classList.add('is-revealed');
+    });
+  }
+  function resetChatReveal() {
+    aiChatMsgs.forEach(m => m.classList.remove('is-revealed'));
+    requestAnimationFrame(updateChatReveal);
+  }
+  aiModal.addEventListener('scroll', updateChatReveal, { passive: true });
   aiOverlay.addEventListener('click', (e) => { if (e.target === aiOverlay) closeAI(); });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !aiOverlay.hidden) closeAI();
@@ -1682,38 +1889,34 @@
     }
   });
 
-  // Avatar tooltip — copy-to-clipboard button. On success show a toast.
-  const copyBtn = document.querySelector('.tip-copy');
-  const toastEl = document.getElementById('toast');
-  const EMAIL = 'xyeon.ux@gmail.com';
-  let toastTimer;
-  function showToast() {
-    toastEl.classList.add('is-visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('is-visible'), 2200);
-  }
+  // Avatar tooltip — mail button opens the user's email client directly.
+  const mailBtn = document.querySelector('.tip-copy');
+  mailBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Avatar tooltip — copy button copies the email to clipboard.
+  const copyBtn = document.querySelector('.tip-copybtn');
+  const emailAddr = 'xyeon.ux@gmail.com';
+  let copyResetTimer = null;
   copyBtn.addEventListener('click', async (e) => {
     e.stopPropagation();
     e.preventDefault();
     try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(EMAIL);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = EMAIL;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
-      copyBtn.classList.add('copied');
-      showToast();
-      setTimeout(() => copyBtn.classList.remove('copied'), 1400);
+      await navigator.clipboard.writeText(emailAddr);
     } catch (err) {
-      console.warn('[portfolio] copy failed', err);
+      const ta = document.createElement('textarea');
+      ta.value = emailAddr;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta);
     }
+    copyBtn.classList.add('copied');
+    clearTimeout(copyResetTimer);
+    copyResetTimer = setTimeout(() => copyBtn.classList.remove('copied'), 1400);
   });
 </script>
 

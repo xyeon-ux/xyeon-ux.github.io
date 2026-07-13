@@ -25,19 +25,17 @@
     --mint: #eff5f6;
   }
 
-  /* ---------- Fixed-width 1920 stage, horizontal scale to viewport ---------- */
+  /* ---------- Fluid stage: max 1920, reflows down to mobile ---------- */
   #stage-wrap {
     position: relative;
     width: 100%;
     overflow: hidden;
   }
   #stage {
-    width: 1920px;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    margin-left: -960px;
-    transform-origin: top center;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
   }
 
   /* ---------- Top bar ---------- */
@@ -78,9 +76,9 @@
 
   /* ---------- Section frame ---------- */
   .section {
-    width: 1920px;
+    width: 100%;
     position: relative;
-    padding: 0 252px;
+    padding: 0 clamp(20px, 13.125%, 252px);
   }
   .kicker {
     font-weight: 800;
@@ -110,11 +108,15 @@
   }
   .lead b { color: var(--ink); font-weight: 700; }
   .figure {
-    width: 1920px;
+    width: 100%;
     display: flex;
     justify-content: center;
   }
-  .figure img { display: block; width: 1920px; height: auto; }
+  .figure img { display: block; width: 100%; height: auto; }
+
+  /* Full-bleed section image (headers are baked into the artwork) */
+  .full-fig { display: block; }
+  .full-fig img { width: 100%; height: auto; }
 
   /* ---------- Hero ---------- */
   .hero {
@@ -151,17 +153,17 @@
   .meta-row dt { font-weight: 500; font-size: 26px; color: var(--muted); margin: 0; }
   .meta-row dd { margin: 0; font-weight: 700; font-size: 26px; color: var(--ink); line-height: 1.2; letter-spacing: -0.005em; }
   .hero-visual { display: flex; align-items: center; justify-content: center; }
-  .hero-visual img { width: 900px; height: auto; }
+  .hero-visual img { width: min(900px, 100%); height: auto; }
 
   /* ---------- Overview ---------- */
   .overview { padding-top: 64px; padding-bottom: 18px; }
   .overview .headline { margin-bottom: 20px; }
   .diagram-fig { margin: 24px 0 56px; }
-  .diagram-fig img { width: 1416px; }
+  .diagram-fig img { width: 73.75%; }
 
   /* 주요 기능 card */
   .feature-card {
-    margin: 0 252px 96px;
+    margin: 0 clamp(20px, 13.125%, 252px) 96px;
     background: #ffffff;
     border-radius: 20px;
     padding: 40px 64px;
@@ -191,7 +193,7 @@
   .goal { background: #ffffff; padding: 96px 0 90px; }
   .goal .lead { color: #3b3b3b; }
   .goal-fig { margin-top: 56px; }
-  .goal-fig img { width: 1416px; }
+  .goal-fig img { width: 73.75%; }
 
   /* ---------- Voice of Customers (dark) ---------- */
   .voc { background: var(--dark); padding: 100px 0 96px; }
@@ -199,7 +201,7 @@
   .voc .headline { color: #ffffff; font-size: 42px; }
   .voc .lead { color: #c4ccce; }
   .voc-fig { margin-top: 52px; }
-  .voc-fig img { width: 1416px; }
+  .voc-fig img { width: 73.75%; }
 
   /* ---------- Solutions ---------- */
   .solution { background: #f9f9f9; padding: 86px 0 78px; }
@@ -219,14 +221,14 @@
 
   /* ---------- Mint region (Components / QA / Usability) ---------- */
   .mint-block { background: var(--mint); }
-  .chapter { padding: 92px 252px 30px; }
+  .chapter { padding: 92px 0 30px; }
   .chapter .lead { color: #3b3b3b; }
   .chapter-fig { margin-top: 28px; }
-  .qa-fig img { width: 1416px; }
-  .components-fig img, .ut-fig img { width: 1416px; }
+  .qa-fig img { width: 73.75%; }
+  .components-fig img, .ut-fig img { width: 73.75%; }
 
   /* Usability Test head */
-  .ut { padding: 92px 252px 36px; }
+  .ut { padding: 92px 0 36px; }
   .ut-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
   .ut-head .ut-titles .kicker { margin-bottom: 16px; }
   .ut-head .ut-titles .headline { margin: 0; }
@@ -236,15 +238,66 @@
   .ut.last { padding-bottom: 96px; }
 
   /* ---------- Lesson Learned ---------- */
-  .lesson { background: #f9f9f9; padding: 100px 252px 140px; }
+  .lesson { background: #f9f9f9; padding: 100px clamp(20px, 13.125%, 252px) 140px; }
   .lesson .headline { margin-bottom: 48px; white-space: pre-line; font-size: 42px; }
-  .lesson-grid { display: grid; grid-template-columns: 1fr 760px; gap: 64px; align-items: start; }
+  .lesson-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,760px); gap: 64px; align-items: start; }
   .lesson-cards { display: flex; flex-direction: column; gap: 24px; }
   .lesson-card { background: #ffffff; border: 1px solid #e2e6e7; border-radius: 22px; padding: 30px 34px; }
   .lesson-card h4 { font-weight: 700; font-size: 27px; color: var(--teal-label); margin: 0 0 14px; letter-spacing: -0.005em; }
   .lesson-card p { margin: 0; font-weight: 500; font-size: 24px; line-height: 1.55; color: #2c2f30; letter-spacing: -0.005em; }
   .lesson-card b { font-weight: 700; color: var(--ink); }
-  .lesson-photo img { width: 760px; height: auto; border-radius: 18px; display: block; }
+  .lesson-photo img { width: 100%; max-width: 760px; height: auto; border-radius: 18px; display: block; }
+
+  /* =====================================================================
+     RESPONSIVE BREAKPOINTS
+     ===================================================================== */
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 96px; }
+    .hero-visual img { width: min(680px, 86%); }
+    .ut-head { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .ut-meta { text-align: left; white-space: normal; }
+  }
+
+  @media (max-width: 680px) {
+    .kicker { font-size: 22px; margin-bottom: 16px; }
+    .headline, .voc .headline { font-size: 26px; line-height: 1.32; }
+    .lead { font-size: 18px; line-height: 1.55; }
+    .hero-title { font-size: clamp(44px, 16vw, 72px); }
+    .hero-tagline { font-size: 20px; }
+    .hero-subtitle { font-size: 20px; }
+    .role-tags span { height: 40px; font-size: 15px; padding: 0 16px; }
+    .meta-row { grid-template-columns: 92px 1fr; column-gap: 14px; }
+    .meta-row dt, .meta-row dd { font-size: 16px; }
+    .hero { padding-top: 84px; padding-bottom: 32px; }
+
+    .feature-card { grid-template-columns: 1fr; row-gap: 28px; padding: 28px 24px; }
+    .feature-card .divider { display: none; }
+    .feature-card h3 { font-size: 20px; text-align: left; }
+    .feature-card li { font-size: 17px; padding-left: 22px; }
+
+    .sol-num { font-size: 22px; }
+    .sol-title { font-size: 24px; line-height: 1.32; }
+    .chip { height: 28px; font-size: 15px; }
+
+    /* figures go full-bleed on phones for maximum legibility */
+    .diagram-fig img, .goal-fig img, .voc-fig img,
+    .qa-fig img, .components-fig img, .ut-fig img { width: 100%; }
+
+    .ut-meta { font-size: 16px; }
+
+    .lesson { padding: 64px 24px 90px; }
+    .lesson .headline { font-size: 24px; margin-bottom: 28px; }
+    .lesson-grid { grid-template-columns: 1fr; gap: 28px; }
+    .lesson-card { padding: 22px 24px; }
+    .lesson-card h4 { font-size: 19px; }
+    .lesson-card p { font-size: 16px; }
+
+    .goal { padding: 64px 0 60px; }
+    .voc { padding: 64px 0 64px; }
+    .solution { padding: 56px 0 50px; }
+    .chapter { padding: 60px 0 24px; }
+    .ut { padding: 56px 0 28px; }
+  }
 </style>
 </head>
 <body>
@@ -343,137 +396,35 @@
       </div>
     </div>
 
-    <!-- ===================== SOLUTION 1 ===================== -->
-    <section class="solution" data-screen-label="Solution 1">
-      <div class="section sol-head">
-        <div class="sol-meta">
-          <span class="sol-num">Solution 1</span>
-          <span class="chip">교사</span>
-        </div>
-        <h3 class="sol-title">회원가입 프로세스를 체계적으로 구축하여 사용자의 <em>의사결정 시간을 단축</em>했습니다.</h3>
-      </div>
-      <div class="figure sol-fig">
-        <img src="./assets/jjk/sol1.png" alt="회원가입 3단계 개선 (회원 유형 → 계정 유형 → 회원 정보 입력)">
-      </div>
-    </section>
+    <!-- ===================== SOLUTIONS 1–5 (full-bleed section images) ===================== -->
+    <div class="figure full-fig" data-screen-label="Solution 1">
+      <img src="./assets/jjk/sol1.png" alt="Solution 1 — 회원가입 프로세스를 체계적으로 구축하여 사용자의 의사결정 시간을 단축했습니다.">
+    </div>
+    <div class="figure full-fig" data-screen-label="Solution 2">
+      <img src="./assets/jjk/sol2.png" alt="Solution 2 — 복수 컬럼을 사용하여 교사의 평가항목 피드백을 세분화했습니다.">
+    </div>
+    <div class="figure full-fig" data-screen-label="Solution 3">
+      <img src="./assets/jjk/sol3.png" alt="Solution 3 — 버튼 역할을 명확히하여 불필요한 탐색 없이 피드백 현황을 파악할 수 있도록 개선했습니다.">
+    </div>
+    <div class="figure full-fig" data-screen-label="Solution 4">
+      <img src="./assets/jjk/sol4.png" alt="Solution 4 — 디지털 책의 편집 사용성을 직관적으로 개선했습니다.">
+    </div>
+    <div class="figure full-fig" data-screen-label="Solution 5">
+      <img src="./assets/jjk/sol5.png" alt="Solution 5 — 플랫폼 간 내비게이션 일관성과 콘텐츠 접근성을 높였습니다.">
+    </div>
 
-    <!-- ===================== SOLUTION 2 ===================== -->
-    <section class="solution" data-screen-label="Solution 2">
-      <div class="section sol-head">
-        <div class="sol-meta">
-          <span class="sol-num">Solution 2</span>
-          <span class="chip">교사</span>
-        </div>
-        <h3 class="sol-title">복수 컬럼을 사용하여 <em>교사의 평가항목 피드백을 세분화</em>했습니다.</h3>
-      </div>
-      <div class="figure sol-fig">
-        <img src="./assets/jjk/sol2.png" alt="평가항목 피드백 세분화 화면과 개선 포인트">
-      </div>
-    </section>
-
-    <!-- ===================== SOLUTION 3 ===================== -->
-    <section class="solution" data-screen-label="Solution 3">
-      <div class="section sol-head">
-        <div class="sol-meta">
-          <span class="sol-num">Solution 3</span>
-          <span class="chip">교사</span>
-          <span class="chip">학생</span>
-        </div>
-        <h3 class="sol-title">버튼 역할을 명확히하여 <em>불필요한 탐색 없이 피드백 현황을 파악</em>할 수 있도록 개선했습니다.</h3>
-      </div>
-      <div class="figure sol-fig">
-        <img src="./assets/jjk/sol3.png" alt="버튼 역할 구분 및 피드백 미리보기 화면">
-      </div>
-    </section>
-
-    <!-- ===================== SOLUTION 4 ===================== -->
-    <section class="solution" data-screen-label="Solution 4">
-      <div class="section sol-head">
-        <div class="sol-meta">
-          <span class="sol-num">Solution 4</span>
-          <span class="chip">교사</span>
-        </div>
-        <h3 class="sol-title">디지털 책의 편집 사용성을 직관적으로 개선했습니다.</h3>
-      </div>
-      <div class="figure sol-fig">
-        <img src="./assets/jjk/sol4.png" alt="디지털 책 편집 화면 개선과 개선 포인트">
-      </div>
-    </section>
-
-    <!-- ===================== SOLUTION 5 ===================== -->
-    <section class="solution" data-screen-label="Solution 5">
-      <div class="section sol-head">
-        <div class="sol-meta">
-          <span class="sol-num">Solution 5</span>
-          <span class="chip">교사</span>
-          <span class="chip">학생</span>
-        </div>
-        <h3 class="sol-title">플랫폼 간 내비게이션 일관성과 <em>콘텐츠 접근성</em>을 높였습니다.</h3>
-      </div>
-      <div class="figure sol-fig">
-        <img src="./assets/jjk/sol5.png" alt="모바일 내비게이션 일관성 및 콘텐츠 접근성 개선">
-      </div>
-    </section>
-
-    <!-- ===================== MINT REGION: Components / QA / Usability ===================== -->
-    <div class="mint-block">
-
-      <!-- Components -->
-      <section class="section chapter" data-screen-label="Components">
-        <h2 class="kicker">Components</h2>
-        <p class="headline">컴포넌트 체계화로 디자인-개발 일관성 확보</p>
-        <p class="lead">기존에는 <b>UI 컴포넌트</b>가 피그마에서 체계적으로 관리되지 않고 <b>프론트엔드 코드로만 존재</b>하여, 일관성 유지와 효율적인 업데이트가 어려운 상황이었습니다.
-따라서 디자인-개발 간 커뮤니케이션 비용 절감 및 UI 일관성을 통한 사용자 경험 품질 향상을 목표로 컴포넌트를 디자인하였습니다.</p>
-      </section>
-      <div class="figure chapter-fig components-fig">
-        <img src="./assets/jjk/components.png" alt="Button · TextField · Popup · Modal 등 컴포넌트 라이브러리">
-      </div>
-
-      <!-- QA Sheet -->
-      <section class="section chapter" data-screen-label="QA Sheet">
-        <h2 class="kicker">QA Sheet</h2>
-        <p class="headline">개발 검증을 위한 테스트 케이스 작성</p>
-        <p class="lead">디자인 작업 완료 후 개발 산출물이 기획 의도대로 구현되었는지 검증하기 위해 <b>총 549개의 테스트 케이스를 작성</b>하였습니다.
-단순 기능 구현 여부뿐 아니라 <b>인터랙션, 피드백 메시지, 레이아웃 등 UXUI 관점의 항목</b>을 별도로 분리하여 검수하였습니다.</p>
-      </section>
-      <div class="figure chapter-fig qa-fig">
-        <img src="./assets/jjk/qa.png" alt="자작자작 시험항목서 (QA 시트)">
-      </div>
-
-      <!-- Usability Test — 교사 -->
-      <section class="section ut" data-screen-label="Usability Test 교사">
-        <div class="ut-head">
-          <div class="ut-titles">
-            <h2 class="kicker">Usabillity Test</h2>
-            <p class="headline">학습 비용 감소 확인(교사)</p>
-          </div>
-          <div class="ut-meta">
-            <div>참여인원 &nbsp;|&nbsp; <b>40대 초등 교사 3인</b></div>
-            <div>성공기준 &nbsp;|&nbsp; <b>성공률: 75%이상, 평균 소요 시간: 2분 이내</b></div>
-          </div>
-        </div>
-      </section>
-      <div class="figure ut-fig">
-        <img src="./assets/jjk/ut-teacher.png" alt="교사 사용성 테스트 Task 1 · Task 2 결과">
-      </div>
-
-      <!-- Usability Test — 학생 -->
-      <section class="section ut last" data-screen-label="Usability Test 학생">
-        <div class="ut-head">
-          <div class="ut-titles">
-            <h2 class="kicker">Usabillity Test</h2>
-            <p class="headline">학습 비용 감소 확인(학생)</p>
-          </div>
-          <div class="ut-meta">
-            <div>참여인원 &nbsp;|&nbsp; <b>초등 고학년 1인, 중학생 2인</b></div>
-            <div>성공기준 &nbsp;|&nbsp; <b>성공률: 80%이상, 평균 소요 시간: 3분 이내</b></div>
-          </div>
-        </div>
-      </section>
-      <div class="figure ut-fig">
-        <img src="./assets/jjk/ut-student.png" alt="학생 사용성 테스트 Task 1 · Task 2 결과">
-      </div>
-
+    <!-- ===================== Components / QA / Usability (full-bleed section images) ===================== -->
+    <div class="figure full-fig" data-screen-label="Components">
+      <img src="./assets/jjk/components.png" alt="Components — 컴포넌트 체계화로 디자인-개발 일관성 확보">
+    </div>
+    <div class="figure full-fig" data-screen-label="QA Sheet">
+      <img src="./assets/jjk/qa.png" alt="QA Sheet — 개발 검증을 위한 테스트 케이스 작성">
+    </div>
+    <div class="figure full-fig" data-screen-label="Usability Test 교사">
+      <img src="./assets/jjk/ut-teacher.png" alt="Usability Test — 학습 비용 감소 확인(교사)">
+    </div>
+    <div class="figure full-fig" data-screen-label="Usability Test 학생">
+      <img src="./assets/jjk/ut-student.png" alt="Usability Test — 학습 비용 감소 확인(학생)">
     </div>
 
     <!-- ===================== LESSON LEARNED ===================== -->
@@ -502,19 +453,7 @@
 </div>
 
 <script>
-  const stage = document.getElementById('stage');
-  const wrap = document.getElementById('stage-wrap');
-  function fit() {
-    const vw = document.documentElement.clientWidth;
-    const s = Math.min(1, vw / 1920);
-    stage.style.transform = 'scale(' + s + ')';
-    wrap.style.height = (stage.offsetHeight * s) + 'px';
-  }
-  window.addEventListener('resize', fit);
-  window.addEventListener('load', fit);
-  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
-  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(fit).observe(stage); }
-  fit();
+  /* Stage is now fluid (max-width 1920, reflows via CSS) — no canvas scaling. */
 </script>
 
 </body>

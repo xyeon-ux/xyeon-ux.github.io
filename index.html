@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>Product Designer 정시연</title>
+<title>Portfolio — 2026.05</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,6 +42,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background: #f9f9f9;
     padding: clamp(20px, 3vw, 44px) clamp(16px, 3vw, 40px) clamp(40px, 5vw, 72px);
   }
@@ -51,6 +52,10 @@
     max-width: 1340px;
     margin: 0 auto;
     background: transparent;
+    /* First-load scale: at 100% browser zoom the main view renders at 80%
+       of its natural size. Responsive reflow is preserved (zoom scales the
+       already-computed responsive layout uniformly). */
+    zoom: 0.8;
   }
 
   /* ---------- Top header: avatar + segmented nav, centered ---------- */
@@ -216,10 +221,12 @@
   .bento {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows:
-      clamp(180px, 19.5vw, 266px)
-      clamp(180px, 19.5vw, 266px)
-      clamp(180px, 19.5vw, 266px);
+    /* Fit the whole 3-row bento within the viewport height (minus header +
+       padding) so the entire grid is visible on one screen. Capped so it
+       never grows oversized on large/tall displays, floored so it stays
+       usable on short ones. */
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    height: clamp(540px, calc(100vh - 268px), 846px);
     grid-template-areas:
       "jajak   jajak about   about"
       "jajak   jajak iphones moon"
@@ -568,6 +575,7 @@
   /* Tablet — 2 columns, hero first and full-width */
   @media (max-width: 1024px) {
     .bento {
+      height: auto;
       grid-template-columns: 1fr 1fr;
       grid-template-rows:
         clamp(280px, 46vw, 400px)
@@ -590,6 +598,7 @@
     .bento {
       display: flex;
       flex-direction: column;
+      height: auto;
       grid-template-areas: none;
       gap: 14px;
     }
@@ -1126,8 +1135,8 @@
         <div class="avatar" role="img" aria-label="Designer avatar" tabindex="0"></div>
         <div class="avatar-tooltip" role="tooltip">
           <span class="tip-label">Contact</span>
-          <span class="tip-email">xyeon.ux@gmail.com</span>
-          <a class="tip-copy" href="mailto:xyeon.ux@gmail.com" aria-label="이메일 보내기">
+          <span class="tip-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="473f3e22282969323f07202a262e2b6924282a">[email&#160;protected]</a></span>
+          <a class="tip-copy" href="/cdn-cgi/l/email-protection#eb93928e8485c59e93ab8c868a8287c5888486" aria-label="이메일 보내기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="2" y="4" width="20" height="16" rx="3"></rect>
               <path d="M3 6l9 7 9-7"></path>
@@ -1267,7 +1276,7 @@
       <div class="am-head-left">
         <h2 class="am-title" id="amTitle">안녕하세요,<br>Product Designer<br>정시연입니다.</h2>
         <dl class="am-contact">
-          <dt>Email.</dt><dd>xyeon.ux@gmail.com</dd>
+          <dt>Email.</dt><dd><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fa82839f9594d48f82ba9d979b9396d4999597">[email&#160;protected]</a></dd>
           <dt>Tel.</dt><dd>010-7194-3440</dd>
         </dl>
       </div>
@@ -1718,7 +1727,7 @@
   <span class="toast-text">정시연 님 이메일을 복사했습니다.</span>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // The bento now reflows responsively via CSS Grid — no canvas scaling needed.
   const stage = document.getElementById('stage');
 
